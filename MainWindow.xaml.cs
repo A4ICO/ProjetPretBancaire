@@ -53,6 +53,25 @@ namespace GestionPretBancaire
                 MessageBox.Show("ERROR: " + ex.Message + "\n\n" + ex.StackTrace);
             }
         }
+
+        private async void existsClient_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string numCompte = "12345678"; // ← changer pour tester
+
+                bool exists = await _clientRepo.ExistsAsync(numCompte);
+
+                MessageBox.Show(exists
+                    ? $"✅ Client {numCompte} EXISTS dans la base"
+                    : $"❌ Client {numCompte} n'existe PAS dans la base"
+                );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ERROR: " + ex.Message + "\n\n" + ex.StackTrace);
+            }
+        }
     }
 
     }
