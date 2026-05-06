@@ -18,26 +18,37 @@ namespace GestionPretBancaire.ViewModels
             _repository = new PretRepository();
         }
 
-        // ====================== GET ALL ======================
+
+        /// 
+        /// 
+        ///  Request to retrieve all loans from the database
+        /// 
+        ///
         public async Task<List<Pret>> GetAllAsync()
         {
             return await _repository.GetAllAsync();
         }
 
-        // ====================== GET BY ID ======================
+
+
+        /// 
+        /// 
+        ///  Request to retrieve a loan by its numero de compte from the database
+        /// 
+        ///
         public async Task<List<Pret>> GetByNumCompte(string numCompte)
         {
            
             return await _repository.GetByNumCompteAsync(numCompte);
         }
 
-        // ====================== GET BY CIN ======================
-        //public async Task<Pret?> GetByCINAsync(string numCIN)
-        //{
-        //    return await _repository.GetByCINAsync(numCIN);
-        //}
 
-        // ====================== ADD ======================
+
+        /// 
+        /// 
+        ///  Add a new loan to the database
+        /// 
+        ///
         public async Task<bool> AddAsync(Pret pret)
         {
             try
@@ -53,7 +64,12 @@ namespace GestionPretBancaire.ViewModels
             }
         }
 
-        // ====================== UPDATE ======================
+
+        /// 
+        /// 
+        /// Update an existing pret in the database
+        /// 
+        ///
         public async Task<bool> UpdateAsync(Pret pret)
         {
             try
@@ -69,7 +85,12 @@ namespace GestionPretBancaire.ViewModels
             }
         }
 
-        // ====================== DELETE ======================
+
+        /// 
+        /// 
+        ///  Delete a pret from the database by numero de compte
+        /// 
+        ///
         public async Task<bool> DeleteAsync(string numCompte)
         {
             try

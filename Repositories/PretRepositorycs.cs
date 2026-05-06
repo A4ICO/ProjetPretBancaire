@@ -3,9 +3,6 @@ using GestionPretBancaire.Helpers;
 using GestionPretBancaire.Models;
 using GestionPretBancaire.Repositories.Interfaces;
 using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace GestionPretBancaire.Repositories

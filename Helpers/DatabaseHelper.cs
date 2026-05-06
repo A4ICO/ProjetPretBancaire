@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 using System.Windows;
 using MySql.Data.MySqlClient;
-using Mysqlx.Connection;
 
 namespace GestionPretBancaire.Helpers
 {
+
+    /// 
+    ///To facilitate database connection and operations,
+    /// this helper class provides a method to get a MySQL connection using the specified connection string. 
+    /// It handles exceptions and displays error messages if the connection fails.
+    /// 
     internal class DatabaseHelper
     {
 

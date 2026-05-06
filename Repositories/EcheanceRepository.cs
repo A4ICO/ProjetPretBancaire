@@ -1,17 +1,19 @@
 ﻿using Dapper;
 using GestionPretBancaire.Helpers;
 using GestionPretBancaire.Models;
-using MySqlX.XDevAPI.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Navigation;
+
 
 namespace GestionPretBancaire.Repositories
 {
     class EcheanceRepository
     {
+
+        /// 
+        /// 
+        /// Add  a new Echeance to the database.
+        ///         
+        /// 
         public async Task AddAsync(Echeance echeance)
         {
             string query = "INSERT INTO Echeance (CodeEcheance, ReferencePret, Date, Balance, Interet, SoldeRestant, Operation, DatePaiment) " +
@@ -31,7 +33,11 @@ namespace GestionPretBancaire.Repositories
             }
         }
 
-
+        /// 
+        /// 
+        /// Get all Echeances from the database and return them as a list
+        /// 
+        /// 
         public async Task<List<Echeance>> GetAllAsync()
         {
             string query = " SELECT * FROM Echeance";
@@ -53,6 +59,11 @@ namespace GestionPretBancaire.Repositories
             }
         }
 
+        /// 
+        /// 
+        /// Get  a specific Echeance by its CodeEcheance
+        /// 
+        /// 
 
         public async Task<Echeance?> GetAsync(int codeEcheance)
         {
@@ -76,7 +87,11 @@ namespace GestionPretBancaire.Repositories
             }
         }
 
-
+        /// 
+        /// 
+        /// Get all Echeances associated with a specific ReferencePret 
+        /// 
+        /// 
         public async Task<List<Echeance>> GetByReferencePretAsync(int _referencePret)
         {
             string query = "SELECT * FROM Echeance WHERE ReferencePret = @referencePret;";
@@ -95,7 +110,11 @@ namespace GestionPretBancaire.Repositories
             }
         }
 
-
+        /// 
+        /// 
+        /// Delete an Echeance from the database by using it's CodeEcheance 
+        /// 
+        /// 
         public async Task<bool> DeleteAsync(int _codeEcheance)
         {
             string query = "DELETE FROM Echeance WHERE CodeEcheance = @codeEcheance;";
@@ -116,6 +135,13 @@ namespace GestionPretBancaire.Repositories
 
         }
 
+
+
+        /// 
+        /// 
+        ///  Update an existing Echeance in the database by using it's CodeEcheance as a reference
+        /// 
+        /// 
         public async Task UpdateAsync(Echeance echeance)
         {
             string query = "UPDATE Echeance SET ReferencePret = @ReferencePret, Date = @Date, Balance = @Balance, " +

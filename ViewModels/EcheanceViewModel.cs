@@ -1,9 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using GestionPretBancaire.Models;
 using GestionPretBancaire.Repositories;
+
+
+/// 
+/// 
+///  It's a layer for the business logic of the application, 
+///  it interacts with the ClientRepository to perform operations related to clients,
+
 
 namespace GestionPretBancaire.Managers
 {
@@ -16,19 +20,35 @@ namespace GestionPretBancaire.Managers
             _repository = new EcheanceRepository();
         }
 
-        // ====================== GET ALL ======================
+
+        /// 
+        /// 
+        /// Get all Echeances from the database
+        /// 
+        /// 
         public async Task<List<Echeance>> GetAllAsync()
         {
             return await _repository.GetAllAsync();
         }
 
-        // ====================== GET BY PRET ======================
+
+        /// 
+        /// 
+        /// Get all Echeances by reference pret from the database
+        /// 
+        /// 
         public async Task<List<Echeance>> GetByReferencePretAsync(int referencePret)
         {
             return await _repository.GetByReferencePretAsync(referencePret);
         }
 
-        // ====================== ADD ======================
+
+
+        /// 
+        /// 
+        /// Request add a new Echeance to the database
+        /// 
+        ///
         public async Task<bool> AddAsync(Echeance echeance)
         {
             try
@@ -44,7 +64,12 @@ namespace GestionPretBancaire.Managers
             }
         }
 
-        // ====================== UPDATE ======================
+
+        /// 
+        /// 
+        /// Request update an existing Echeance in the database  
+        /// 
+        ///
         public async Task<bool> UpdateAsync(Echeance echeance)
         {
             try
@@ -59,7 +84,12 @@ namespace GestionPretBancaire.Managers
             }
         }
 
-        // ====================== DELETE ======================
+        /// 
+        /// 
+        /// Request delete an Echeance from the database 
+        /// 
+        ///
+
         public async Task<bool> DeleteAsync(int codeEcheance)
         {
             try
@@ -73,7 +103,11 @@ namespace GestionPretBancaire.Managers
             }
         }
 
-        // ====================== GET ONE ======================
+        /// 
+        /// 
+        ///  Request to get an Echeance by its codeEcheance from the database
+        /// 
+        ///
         public async Task<Echeance?> GetByIdAsync(int codeEcheance)
         {
             return await _repository.GetAsync(codeEcheance);

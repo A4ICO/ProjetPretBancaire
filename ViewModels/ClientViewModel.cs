@@ -1,9 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using GestionPretBancaire.Models;
 using GestionPretBancaire.Repositories;
+
+
+
+/// 
+/// 
+///  It's a layer for the business logic of the application, 
+///  it interacts with the ClientRepository to perform operations related to clients,
+///  such as retrieving all clients, getting a client 
+///  by its numero de compte or CIN, adding a new client, updating an existing client, and deleting a client.
+///  It also handles exceptions and displays error messages when necessary
+/// 
+/// 
+
+
 
 namespace GestionPretBancaire.Managers
 {
@@ -16,25 +27,41 @@ namespace GestionPretBancaire.Managers
             _repository = new ClientRepository();
         }
 
-        // ====================== GET ALL ======================
+        /// 
+        /// 
+        /// Get all clients from the database
+        /// 
+        /// 
         public async Task<List<Client>> GetAllAsync()
         {
             return await _repository.GetAllAsync();
         }
 
-        // ====================== GET BY ID ======================
+        /// 
+        /// 
+        /// Get a client by its numero de compte
+        /// 
+        /// 
         public async Task<Client> GetByIdAsync(string numCompte)
         {
             return await _repository.GetByIdAsync(numCompte);
         }
 
-        // ====================== GET BY CIN ======================
+        /// 
+        /// 
+        ///  Get a client by its numero de CIN
+        /// 
+        /// 
         public async Task<Client?> GetByCINAsync(string numCIN)
         {
             return await _repository.GetByCINAsync(numCIN);
         }
 
-        // ====================== ADD ======================
+        /// 
+        /// 
+        /// Add a new client to the database
+        /// 
+        /// 
         public async Task<bool> AddAsync(Client client)
         {
             try
@@ -50,7 +77,11 @@ namespace GestionPretBancaire.Managers
             }
         }
 
-        // ====================== UPDATE ======================
+        /// 
+        /// 
+        /// Update an existing client in the database by using its numero de compte as a reference
+        /// 
+        /// 
         public async Task<bool> UpdateAsync(Client client)
         {
             try
@@ -66,7 +97,11 @@ namespace GestionPretBancaire.Managers
             }
         }
 
-        // ====================== DELETE ======================
+        /// 
+        /// 
+        /// Delete a client from the database by using its numero de compte as a reference
+        /// 
+        /// 
         public async Task<bool> DeleteAsync(string numCompte)
         {
             try

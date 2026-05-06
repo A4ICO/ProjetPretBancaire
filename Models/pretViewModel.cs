@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GestionPretBancaire.Models
+﻿namespace GestionPretBancaire.Models
 {
     public class PretViewModel
     {

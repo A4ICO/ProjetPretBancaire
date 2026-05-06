@@ -3,15 +3,19 @@ using GestionPretBancaire.Helpers;
 using GestionPretBancaire.Models;
 using GestionPretBancaire.Repositories.Interfaces;
 using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace GestionPretBancaire.Repositories
 {
     public class ClientRepository : IClientRepository
     {
+
+
+        /// 
+        /// 
+        /// Get all clients
+        /// 
+        /// 
         public async Task<List<Client>> GetAllAsync()
         {
             try
@@ -35,6 +39,13 @@ namespace GestionPretBancaire.Repositories
             }
         }
 
+
+
+        /// 
+        /// 
+        /// Get one client by numero de compte
+        /// 
+        /// 
         public async Task<Client?> GetByIdAsync(string numCompte)
         {
             try
@@ -52,6 +63,12 @@ namespace GestionPretBancaire.Repositories
             }
         }
 
+
+        /// 
+        /// 
+        /// Get a client by numero de CIN
+        /// 
+        /// 
         public async Task<Client?> GetByCINAsync(string numCIN)
         {
             try
@@ -69,6 +86,12 @@ namespace GestionPretBancaire.Repositories
             }
         }
 
+
+        /// 
+        /// 
+        /// Insert a new client into the database
+        /// 
+        /// 
         public async Task AddAsync(Client client)
         {
             try
@@ -95,7 +118,11 @@ namespace GestionPretBancaire.Repositories
                 MessageBox.Show($"Erreur inattendue :\n{ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
+        /// 
+        /// 
+        /// update an existing client in the database
+        /// 
+        /// 
         public async Task UpdateAsync(Client client)
         {
             try
@@ -129,6 +156,12 @@ namespace GestionPretBancaire.Repositories
             }
         }
 
+
+        /// 
+        /// 
+        /// Delete a client from the database by numero de compte
+        /// 
+        /// 
         public async Task<bool> DeleteAsync(string numCompte)
         {
             try
