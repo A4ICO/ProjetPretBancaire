@@ -2,170 +2,193 @@
 using GestionPretBancaire.Helpers;
 using GestionPretBancaire.Models;
 using GestionPretBancaire.Repositories.Interfaces;
-using LinqToDB.SqlQuery;
-using Mysqlx;
-using Mysqlx.Crud;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace GestionPretBancaire.Repositories
 {
-    class PretRepositorycs : IPretRepository
+    public class PretRepository : IPretRepository
     {
+        // ====================== ADD PRET ======================
         public async Task AddAsync(Pret pret)
         {
-            string query = "INSERT INTO Pret (Reference, NumCompte, TypePret, Name, Montant, TauxInteret, Status, DateCreation) VALUES (@Reference, @NumCompte, @TypePret, @Name, @Montant, @TauxInteret, @Status, @DateCreation);";
+            string query = @"INSERT INTO Pret (Reference, NumCompte, TypePret, Name, Montant, 
+                                             TauxInteret, Status, DateCreation) 
+                           VALUES (@Reference, @NumCompte, @TypePret, @Name, @Montant, 
+                                   @TauxInteret, @Status, @DateCreation);";
+
             try
             {
-
                 using (var conn = new DatabaseHelper().getConnection())
                 {
                     await conn.ExecuteAsync(query, pret);
+                    MessageBox.Show("Prêt ajouté avec succès !", "Succès",
+                                  MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
-
-            catch (SqlException ex)
+            catch (MySqlException ex) when (ex.Number == 1062)
             {
-                Console.WriteLine("Error adding pret: " + ex.Message);
+                MessageBox.Show("Un prêt avec cette référence existe déjà.", "Doublon",
+                              MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show($"Erreur de base de données :\n{ex.Message}", "Erreur",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur inattendue :\n{ex.Message}", "Erreur",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-
-
+        // ====================== GET ALL ======================
         public async Task<List<Pret>> GetAllAsync()
         {
-            string query = "SELECT * FROM client;";
+            string query = "SELECT * FROM Pret ORDER BY DateCreation DESC;";
 
             try
             {
-                using (var connection = new DatabaseHelper().getConnection())
+                using (var conn = new DatabaseHelper().getConnection())
                 {
-                    connection.Open();
-                    var result = await connection.QueryAsync<Pret>(query);
+                    var result = await conn.QueryAsync<Pret>(query);
                     return result.AsList();
                 }
             }
-
-            catch (SqlException ex)
+            catch (MySqlException ex)
             {
-                MessageBox.Show("Error :" + ex.Message);
+                MessageBox.Show($"Erreur de base de données :\n{ex.Message}", "Erreur",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
                 return new List<Pret>();
-
-
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur inattendue :\n{ex.Message}", "Erreur",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+                return new List<Pret>();
             }
         }
 
-
-
+        // ====================== GET BY CLIENT ======================
         public async Task<List<Pret>> GetByNumCompteAsync(string numCompte)
         {
-            string query = "SELECT * FROM Pret WHERE NumCompte = @NumCompte;";
+            string query = "SELECT * FROM Pret WHERE NumCompte = @NumCompte ORDER BY DateCreation DESC;";
 
             try
             {
-
                 using (var conn = new DatabaseHelper().getConnection())
                 {
-                    conn.Open();
                     var result = await conn.QueryAsync<Pret>(query, new { NumCompte = numCompte });
                     return result.AsList();
                 }
             }
-
-            catch (SqlException ex)
+            catch (MySqlException ex)
             {
-                Console.WriteLine("Error fetching pret by NumCompte: " + ex.Message);
+                MessageBox.Show($"Erreur de base de données :\n{ex.Message}", "Erreur",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
                 return new List<Pret>();
             }
-
         }
 
-
-        public Task<bool> DeleteAsync(int referencePret)
-        {
-            string query = "DELETE FROM Pret WHERE Reference = @Reference;";
-            try
-            {
-                using (var conn = new DatabaseHelper().getConnection())
-                {
-                    conn.Open();
-                    int rowsAffected = conn.Execute(query, new { Reference = referencePret });
-                    return Task.FromResult(rowsAffected > 0);
-                }
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show("Error deleting pret: " + ex.Message);
-
-                //, MessageBoxButton.OK, MessageBoxImage.Warning);
-
-                return Task.FromResult(false);
-            }
-
-        }
-
-        public async Task UpdateAsync(Pret pret)
-        {
-            string query = "UPDATE FROM Pret SET Reference = @Reference , NumCompte = @NumCompte , TypePret = @TypePret , Status = @Status ;";
-
-            try
-            {
-                using (var connection = new DatabaseHelper().getConnection())
-                {
-                    connection.Open();
-                    await connection.QueryAsync(query, pret);
-                    MessageBox.Show("Pret updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-
-            }
-
-            catch (SqlException ex)
-            {
-                MessageBox.Show("Error updating pret: " + ex.Message);
-            }
-        }
-
-        public Task<Pret?> GetByReferencePretAsync(int referencePret)
+        // ====================== GET BY REFERENCE ======================
+        public async Task<Pret?> GetByReferenceAsync(int reference)
         {
             string query = "SELECT * FROM Pret WHERE Reference = @Reference;";
+
             try
             {
                 using (var conn = new DatabaseHelper().getConnection())
                 {
-                    conn.Open();
-                    var result = conn.QueryFirstOrDefault<Pret>(query, new { Reference = referencePret });
-                    return Task.FromResult(result);
+                    return await conn.QueryFirstOrDefaultAsync<Pret>(query, new { Reference = reference });
                 }
             }
-            catch (SqlException ex)
+            catch (MySqlException ex)
             {
-                MessageBox.Show("Error fetching pret by reference: " + ex.Message);
-                return Task.FromResult<Pret?>(null);
+                MessageBox.Show($"Erreur de base de données :\n{ex.Message}", "Erreur",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
             }
         }
 
-        public Task<bool> ExistsAsync(int referencePret)
+        // ====================== UPDATE ======================
+        public async Task UpdateAsync(Pret pret)
+        {
+            string query = @"UPDATE Pret 
+                           SET NumCompte = @NumCompte,
+                               TypePret = @TypePret,
+                               Name = @Name,
+                               Montant = @Montant,
+                               TauxInteret = @TauxInteret,
+                               Status = @Status
+                           WHERE Reference = @Reference;";
+
+            try
+            {
+                using (var conn = new DatabaseHelper().getConnection())
+                {
+                    int rowsAffected = await conn.ExecuteAsync(query, pret);
+
+                    if (rowsAffected > 0)
+                        MessageBox.Show("Prêt modifié avec succès !", "Succès",
+                                      MessageBoxButton.OK, MessageBoxImage.Information);
+                    else
+                        MessageBox.Show("Aucun prêt trouvé avec cette référence.", "Attention");
+                }
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show($"Erreur de base de données :\n{ex.Message}", "Erreur",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur inattendue :\n{ex.Message}", "Erreur",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // ====================== DELETE ======================
+        public async Task<bool> DeleteAsync(string reference)
+        {
+            string query = "DELETE FROM Pret WHERE Reference = @Reference;";
+
+            try
+            {
+                using (var conn = new DatabaseHelper().getConnection())
+                {
+                    int rowsAffected = await conn.ExecuteAsync(query, new { Reference = reference });
+                    return rowsAffected > 0;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show($"Erreur de base de données :\n{ex.Message}", "Erreur",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+        }
+
+        // ====================== EXISTS ======================
+        public async Task<bool> ExistsAsync(int reference)
         {
             string query = "SELECT COUNT(1) FROM Pret WHERE Reference = @Reference;";
+
             try
             {
                 using (var conn = new DatabaseHelper().getConnection())
                 {
-                    conn.Open();
-                    int count = conn.ExecuteScalar<int>(query, new { Reference = referencePret });
-                    return Task.FromResult(count > 0);
+                    int count = await conn.ExecuteScalarAsync<int>(query, new { Reference = reference });
+                    return count > 0;
                 }
             }
-            catch (SqlException ex)
+            catch (Exception)
             {
-                MessageBox.Show("Error checking pret existence: " + ex.Message);
-                return Task.FromResult(false);
+                return false;
             }
         }
-
-
-
+    }
 }
-

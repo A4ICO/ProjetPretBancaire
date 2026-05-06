@@ -12,7 +12,7 @@
         //public DateTime DateCreation { get; set; } = DateTime.Now;
 
         // Relation avec les prêts
-        //public virtual ICollection<Pret> Pret { get; set; } = new List<Pret>();
+        public virtual List<Pret> Prets { get; set; } = new List<Pret>();
 
         public string NomComplet => $"{Prenom} {Nom}";
     }

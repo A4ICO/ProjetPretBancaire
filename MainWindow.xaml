@@ -5,12 +5,256 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GestionPretBancaire"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="900">
-    <Grid>
+        Title="MainWindow" Height="900" Width="1450">
+    <Window.Resources>
 
-        <Button x:Name="addNewClient" Content= "Add" BorderBrush="AliceBlue" BorderThickness="2" Click="addNewClient_Click"> 
-            
-        </Button> 
-        
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="#1F1F1F"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+
+        <Style TargetType="TabItem">
+            <Setter Property="Background" Value="#1F1F1F"/>
+            <Setter Property="Foreground" Value="White"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="Bordure"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="Black"
+                                BorderThickness="2"
+                                CornerRadius="8"
+                                Padding="20,5">
+                            <ContentPresenter ContentSource="Header"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bordure" Property="Background" Value="#1F1F1F"/>
+                                <Setter TargetName="Bordure" Property="BorderBrush" Value="#1565C0"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bordure" Property="Background" Value="#2B2B2B"/>
+                                <Setter TargetName="Bordure" Property="BorderBrush" Value="#1565C0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  -->
+
+        <Style x:Name="Bouton_Style" TargetType="Button">
+            <Setter Property="Background" Value="#1F1F1F" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Cursor" Value="Hand" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bordure"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="Black"
+                                BorderThickness="2"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bordure" Property="Background" Value="#2B2B2B"/>
+                                <Setter TargetName="Bordure" Property="BorderBrush" Value="#1565C0"/>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bordure" Property="Background" Value="#1565C0"/>
+                                <Setter TargetName="Bordure" Property="BorderBrush" Value="#1565C0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  -->
+
+    <Grid Background="#1F1F1F">
+        <TabControl>
+            <TabItem Header="Accueil" Foreground="White">
+
+                <Grid Background="#2B2B2B">
+
+
+
+                </Grid>
+
+            </TabItem>
+
+            <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  -->
+
+            <TabItem Header="Client" Foreground="White">
+                <Grid Background="#2B2B2B">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+                        <Button Content="Ajouter" Margin="5" Padding="25,10" 
+            Background="#1F1F1F" Foreground="White" 
+            Click="Button_Click"/>
+
+                        <Button Content="Modifier" Margin="5" Padding="20,10" 
+            Background="#1F1F1F" Foreground="White" 
+            Click="BtnModifier_Click"/>
+
+                        <Button Content="Supprimer" Margin="5" Padding="15,10" 
+            Background="#1F1F1F" Foreground="White" 
+            Click="BtnSupprimer_Click"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1">
+                        <DataGrid x:Name="Tab_Client" AutoGenerateColumns="False" ItemsSource="{Binding Clients}" CanUserAddRows="False" ScrollViewer.CanContentScroll="True">
+                            <DataGrid.ColumnHeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#1F1F1F"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                    <Setter Property="Padding" Value="10,8"/>
+                                    <Setter Property="BorderBrush" Value="Black"/>
+                                    <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                </Style>
+                            </DataGrid.ColumnHeaderStyle>
+
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Setter Property="Background" Value="#505050"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#656565"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
+
+                            <DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Padding" Value="10,5"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#1565C0"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.CellStyle>
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Nom" Binding="{Binding Nom }" Width="*"/>
+                                <DataGridTextColumn Header="Prénom" Binding="{Binding Prenom }" Width="*"/>
+                                <DataGridTextColumn Header="Numero Telephone" Binding="{Binding NumTel }" Width="*"/>
+                                <DataGridTextColumn Header="CIN" Binding="{Binding NumCIN }" Width="*"/>
+                                <DataGridTextColumn Header="Email" Binding="{Binding Email }" Width="*"/>
+                                <DataGridTextColumn Header="Numero de compte" Binding="{Binding NumCompte }" Width="*"/>
+                                <DataGridTextColumn Header="Identification" Binding="{Binding Adresse }" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Grid>
+
+            </TabItem>
+
+            <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  -->
+
+            <TabItem Header="Pret" >
+
+                <Grid Background="#2B2B2B" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="21*"/>
+                        <ColumnDefinition Width="755*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Margin="10,10,10,10" Grid.Row="0" Grid.ColumnSpan="2">
+
+                        <Button Content="Nouveau"  HorizontalAlignment="Right" Width="75" Margin="10" Padding="0, 5"/>
+
+                    </StackPanel>
+
+                    <ScrollViewer Grid.Row="1"
+              Grid.ColumnSpan="2"
+              VerticalScrollBarVisibility="Auto"
+              HorizontalScrollBarVisibility="Disabled">
+
+                        <ItemsControl x:Name="Releve_Pret">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+
+                                    <Border Margin="10"
+                        Padding="12"
+                        CornerRadius="8"
+                        Background="SeaGreen"
+                        BorderBrush="#DDD"
+                        BorderThickness="1">
+
+                                        <Border.Effect>
+                                            <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.2"/>
+                                        </Border.Effect>
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="120" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="{Binding Nom_Client}" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding Prenom_Client}" FontSize="11"/>
+                                            </StackPanel>
+
+                                            <TextBlock Text="{Binding Type_Pret}" Grid.Column="1"
+                                   VerticalAlignment="Center"/>
+
+                                            <TextBlock Text="{Binding Ref_Pret}" Grid.Column="2"
+                                   VerticalAlignment="Center"
+                                   FontWeight="SemiBold"/>
+
+                                            <Button Content="Info"
+                                Grid.Column="3"
+                                Padding="6,3"
+                                Margin="5,0"/>
+                                        </Grid>
+                                    </Border>
+
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                    </ScrollViewer>
+                </Grid>
+
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

@@ -2,84 +2,70 @@
 using GestionPretBancaire.Helpers;
 using GestionPretBancaire.Models;
 using GestionPretBancaire.Repositories.Interfaces;
-using LinqToDB.SqlQuery;
 using MySql.Data.MySqlClient;
-using Org.BouncyCastle.Crypto.Prng;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media.Animation;
 
 namespace GestionPretBancaire.Repositories
 {
     public class ClientRepository : IClientRepository
     {
-        //private const string V = "SELECT * FROM client ORDER BY nom;";
-
-
-         // for getting all client
         public async Task<List<Client>> GetAllAsync()
         {
             try
             {
                 using (var conn = new DatabaseHelper().getConnection())
                 {
-                    string query = "SELECT * FROM client ORDER BY nom;";
+                    string query = "SELECT * FROM CLIENT ORDER BY Nom, Prenom;";
                     var result = await conn.QueryAsync<Client>(query);
                     return result.AsList();
                 }
             }
-            catch (SqlException ex)
-            {             
-                Console.WriteLine("Database error: " + ex.Message);
+            catch (MySqlException ex)
+            {
+                MessageBox.Show($"Erreur de base de données :\n{ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 return new List<Client>();
             }
-
             catch (Exception ex)
             {
-                // Any other unexpected error
-                Console.WriteLine("Unexpected error: " + ex.Message);
+                MessageBox.Show($"Erreur inattendue :\n{ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 return new List<Client>();
             }
         }
 
-        // get one client by id
-
-        public async Task<Client> GetByIdAsync(string _numCompte)
+        public async Task<Client?> GetByIdAsync(string numCompte)
         {
             try
             {
                 using (var conn = new DatabaseHelper().getConnection())
                 {
-                    string query = "SELECT * FROM CLIENT WHERE NumCompte = @numCompte;";
-                    var result = await conn.QueryFirstOrDefaultAsync<Client>(query , new { numCompte = _numCompte});
-                    return result;
+                    string query = "SELECT * FROM CLIENT WHERE NumCompte = @NumCompte;";
+                    return await conn.QueryFirstOrDefaultAsync<Client>(query, new { NumCompte = numCompte });
                 }
             }
-            catch (SqlException ex) { 
-                MessageBox.Show(ex.Message);
+            catch (MySqlException ex)
+            {
+                MessageBox.Show($"Erreur de base de données :\n{ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
-
         }
 
-        public Task<Client?> GetByCINAsync(string _numCIN)
+        public async Task<Client?> GetByCINAsync(string numCIN)
         {
             try
             {
-                using (var con = new DatabaseHelper().getConnection())
+                using (var conn = new DatabaseHelper().getConnection())
                 {
-                    string query = "SELECT * FROM CLIENT WHERE NumCIN = @numCIN;";
-                    var result = con.QueryFirstOrDefault<Client>(query, new { numCIN = _numCIN });
-                    return Task.FromResult(result);
+                    string query = "SELECT * FROM CLIENT WHERE NumCIN = @NumCIN;";
+                    return await conn.QueryFirstOrDefaultAsync<Client>(query, new { NumCIN = numCIN });
                 }
             }
-            catch (SqlException ex)
+            catch (MySqlException ex)
             {
-                MessageBox.Show(ex.Message);
-                return Task.FromResult<Client?>(null);
-
+                MessageBox.Show($"Erreur de base de données :\n{ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
             }
         }
 
@@ -89,18 +75,26 @@ namespace GestionPretBancaire.Repositories
             {
                 using (var conn = new DatabaseHelper().getConnection())
                 {
-                    string query = "INSERT INTO CLIENT (NumCompte , Nom, Prenom, NumTel, Email, Adresse, NumCIN) " +
-                                   "VALUES (@NumCompte, @Nom, @Prenom, @NumTel, @Email, @Adresse, @NumCIN);";
+                    string query = @"INSERT INTO CLIENT (NumCompte, Nom, Prenom, NumTel, Email, Adresse, NumCIN) 
+                                   VALUES (@NumCompte, @Nom, @Prenom, @NumTel, @Email, @Adresse, @NumCIN);";
+
                     await conn.ExecuteAsync(query, client);
-                    MessageBox.Show("Client added successfully!");
+                    MessageBox.Show("Client ajouté avec succès !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
-            catch (SqlException ex)
+            catch (MySqlException ex) when (ex.Number == 1062) // Duplicate entry
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Un client avec ce Numéro de Compte ou Email existe déjà.", "Doublon", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show($"Erreur de base de données :\n{ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur inattendue :\n{ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
 
         public async Task UpdateAsync(Client client)
         {
@@ -108,36 +102,54 @@ namespace GestionPretBancaire.Repositories
             {
                 using (var conn = new DatabaseHelper().getConnection())
                 {
-                    string query = "UPDATE CLIENT SET Nom = @Nom, Prenom = @Prenom, NumTel = @NumTel, " +
-                                   "Email = @Email, Adresse = @Adresse, NumCIN = @NumCIN WHERE NumCompte = @NumCompte;";
-                    await conn.ExecuteAsync(query, client);
+                    string query = @"UPDATE CLIENT 
+                                   SET Nom = @Nom, 
+                                       Prenom = @Prenom, 
+                                       NumTel = @NumTel, 
+                                       Email = @Email, 
+                                       Adresse = @Adresse, 
+                                       NumCIN = @NumCIN 
+                                   WHERE NumCompte = @NumCompte;";
+
+                    int rowsAffected = await conn.ExecuteAsync(query, client);
+
+                    if (rowsAffected > 0)
+                        MessageBox.Show("Client modifié avec succès !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                    else
+                        MessageBox.Show("Aucun client trouvé avec ce NumCompte.", "Attention", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
-            catch (SqlException ex)
+            catch (MySqlException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Erreur de base de données :\n{ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur inattendue :\n{ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-
-        public async Task<bool> DeleteAsync(string _numCompte)
+        public async Task<bool> DeleteAsync(string numCompte)
         {
             try
             {
                 using (var conn = new DatabaseHelper().getConnection())
                 {
-                    string query = "DELETE FROM CLIENT WHERE NumCompte = @numCompte;";
-                    int rowsAffected = await conn.ExecuteAsync(query, new { numCompte = _numCompte });
+                    string query = "DELETE FROM CLIENT WHERE NumCompte = @NumCompte;";
+                    int rowsAffected = await conn.ExecuteAsync(query, new { NumCompte = numCompte });
                     return rowsAffected > 0;
                 }
             }
-            catch (SqlException ex)
+            catch (MySqlException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Erreur de base de données :\n{ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur inattendue :\n{ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
         }
-
     }
-
 }

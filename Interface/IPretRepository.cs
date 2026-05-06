@@ -7,8 +7,8 @@ namespace GestionPretBancaire.Repositories.Interfaces
         Task AddAsync(Pret pret);
         Task<List<Pret>> GetAllAsync();
         Task<List<Pret>> GetByNumCompteAsync(string numCompte);
-        Task<Pret?> GetByReferencePretAsync(int referencePret);
-        Task<bool> DeleteAsync(int referencePret);
+        //Task<Pret?> GetByReferencePretAsync(int referencePret);
+        Task<bool> DeleteAsync(string referencePret);
         Task UpdateAsync(Pret pret);
         Task<bool> ExistsAsync(int referencePret);
     }
