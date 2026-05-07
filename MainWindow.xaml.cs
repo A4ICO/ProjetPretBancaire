@@ -9,7 +9,7 @@ namespace GestionPretBancaire
     {
         private readonly ClientManager _clientManager;
         private readonly PretManager _pretManager;
-        private readonly S_LoadPrets _s_loadPrets = new();
+        private readonly S_LoadPrets _loadPrets ;
 
 
         public MainWindow()
@@ -17,11 +17,11 @@ namespace GestionPretBancaire
             InitializeComponent();
             _clientManager = new ClientManager();
             _pretManager = new PretManager();
-
+            _loadPrets = new S_LoadPrets();
             // Load data when window opens
             LoadClients();
             LoadPrets();
-           _s_loadPrets.Charger_Pret(PretList);
+           _loadPrets.Charger_Pret(Acceuil_grid);
         }
         private async void LoadClients()
         {

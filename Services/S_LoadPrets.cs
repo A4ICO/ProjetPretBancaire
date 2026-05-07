@@ -28,13 +28,15 @@ namespace GestionPretBancaire.Services
                     ReferencePret = p.ReferencePret,
                     NomClient = p.NomClient ?? "N/A",
                     PrenomClient = p.PrenomClient ?? "N/A",
-                    Montant = p.Montant,
+                    Montant = p.Montant ,
                     TauxInteret = p.TauxInteret,
-                    //Duree_Mois = 12,
-                    TypePret = p.TypePret,
-                    StatusPret = p.StatusPret
+                    DateCreation = p.DateCreation ?? "N/A",
+                    DateFin = p.DateFin ?? "N/A",
+                    TypePret = p.TypePret ?? "N/A",
+                    StatusPret = p.StatusPret ?? "N/A"
                 });
             }
+
 
           
             int row = 0;
@@ -110,6 +112,12 @@ namespace GestionPretBancaire.Services
                 contentPanel.Children.Add(new TextBlock
                 {
                     Text = $"Statut: {pret.StatusPret}",
+                    Foreground = Brushes.White
+                });
+
+                contentPanel.Children.Add(new TextBlock
+                {
+                    Text = $"Statut: {pret.DateCreation}",
                     Foreground = Brushes.White
                 });
 

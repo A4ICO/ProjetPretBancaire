@@ -91,11 +91,8 @@
             <TabItem Header="Accueil" Foreground="White">
 
                 <ScrollViewer>
-                <Grid x:Name="Acceuil_grid" Background="#2B2B2B">
-
-
-
-                </Grid>
+                    <Grid x:Name="Acceuil_grid" Background="#2B2B2B">
+                    </Grid>
                 </ScrollViewer>
 
             </TabItem>
@@ -164,8 +161,8 @@
                             </DataGrid.CellStyle>
 
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Nom" Binding="{Binding Nom }" Width="*"/>
-                                <DataGridTextColumn Header="Prénom" Binding="{Binding Prenom }" Width="*"/>
+                                <DataGridTextColumn Header="Nom" Binding="{Binding NomClient }" Width="*"/>
+                                <DataGridTextColumn Header="Prénom" Binding="{Binding PrenomClient }" Width="*"/>
                                 <DataGridTextColumn Header="Numero Telephone" Binding="{Binding NumTel }" Width="*"/>
                                 <DataGridTextColumn Header="CIN" Binding="{Binding NumCIN }" Width="*"/>
                                 <DataGridTextColumn Header="Email" Binding="{Binding Email }" Width="*"/>
