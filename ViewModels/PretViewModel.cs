@@ -106,5 +106,12 @@ namespace GestionPretBancaire.ViewModels
                 return false;
             }
         }
+
+
+
+        //public async Task<List<>> GetAllAsync()
+        //{
+
+        //}
     }
 }

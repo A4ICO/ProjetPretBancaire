@@ -91,7 +91,7 @@ namespace GestionPretBancaire.Controllers
                     return false;
                 }
 
-                if (echeance.Balance < 0)
+                if (echeance.Capital < 0)
                 {
                     MessageBox.Show("Balance cannot be negative.");
                     return false;

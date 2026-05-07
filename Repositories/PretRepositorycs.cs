@@ -12,10 +12,10 @@ namespace GestionPretBancaire.Repositories
         // ====================== ADD PRET ======================
         public async Task AddAsync(Pret pret)
         {
-            string query = @"INSERT INTO Pret (Reference, NumCompte, TypePret, Name, Montant, 
-                                             TauxInteret, Status, DateCreation) 
-                           VALUES (@Reference, @NumCompte, @TypePret, @Name, @Montant, 
-                                   @TauxInteret, @Status, @DateCreation);";
+            string query = @"INSERT INTO Pret (ReferencePret, NumCompte, TypePret , Montant, 
+                                             TauxInteret, StatusPret, DateCreation , DateFin , NumCompte) 
+                           VALUES (@ReferencePret, @NumCompte, @TypePret , @Montant, 
+                                   @TauxInteret, @StatusPret, @DateCreation ,@DateFin ,@NumCompte);";
 
             try
             {
@@ -117,11 +117,10 @@ namespace GestionPretBancaire.Repositories
             string query = @"UPDATE Pret 
                            SET NumCompte = @NumCompte,
                                TypePret = @TypePret,
-                               Name = @Name,
                                Montant = @Montant,
                                TauxInteret = @TauxInteret,
-                               Status = @Status
-                           WHERE Reference = @Reference;";
+                               StatusPret = @Status
+                           WHERE ReferencePret = @Reference;";
 
             try
             {
@@ -151,7 +150,7 @@ namespace GestionPretBancaire.Repositories
         // ====================== DELETE ======================
         public async Task<bool> DeleteAsync(string reference)
         {
-            string query = "DELETE FROM Pret WHERE Reference = @Reference;";
+            string query = "DELETE FROM Pret WHERE ReferencePret = @ReferencePret;";
 
             try
             {
@@ -172,7 +171,7 @@ namespace GestionPretBancaire.Repositories
         // ====================== EXISTS ======================
         public async Task<bool> ExistsAsync(int reference)
         {
-            string query = "SELECT COUNT(1) FROM Pret WHERE Reference = @Reference;";
+            string query = "SELECT COUNT(1) FROM Pret WHERE Referencepret = @ReferencePret;";
 
             try
             {

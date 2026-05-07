@@ -22,7 +22,7 @@ namespace GestionPretBancaire.Repositories
             {
                 using (var conn = new DatabaseHelper().getConnection())
                 {
-                    string query = "SELECT * FROM CLIENT ORDER BY Nom, Prenom;";
+                    string query = "SELECT * FROM Client ORDER BY NomClient, PrenomClient;";
                     var result = await conn.QueryAsync<Client>(query);
                     return result.AsList();
                 }
@@ -52,7 +52,7 @@ namespace GestionPretBancaire.Repositories
             {
                 using (var conn = new DatabaseHelper().getConnection())
                 {
-                    string query = "SELECT * FROM CLIENT WHERE NumCompte = @NumCompte;";
+                    string query = "SELECT * FROM Client WHERE NumCompte = @NumCompte;";
                     return await conn.QueryFirstOrDefaultAsync<Client>(query, new { NumCompte = numCompte });
                 }
             }
@@ -75,7 +75,7 @@ namespace GestionPretBancaire.Repositories
             {
                 using (var conn = new DatabaseHelper().getConnection())
                 {
-                    string query = "SELECT * FROM CLIENT WHERE NumCIN = @NumCIN;";
+                    string query = "SELECT * FROM Client WHERE NumCIN = @NumCIN;";
                     return await conn.QueryFirstOrDefaultAsync<Client>(query, new { NumCIN = numCIN });
                 }
             }
@@ -98,8 +98,8 @@ namespace GestionPretBancaire.Repositories
             {
                 using (var conn = new DatabaseHelper().getConnection())
                 {
-                    string query = @"INSERT INTO CLIENT (NumCompte, Nom, Prenom, NumTel, Email, Adresse, NumCIN) 
-                                   VALUES (@NumCompte, @Nom, @Prenom, @NumTel, @Email, @Adresse, @NumCIN);";
+                    string query = @"INSERT INTO Client (NumCompte, NomClient, PrenomClient, NumTel, Email, Adresse, NumCIN) 
+                                   VALUES (@NumCompte, @NomClient, @PrenomClient, @NumTel, @Email, @Adresse, @NumCIN);";
 
                     await conn.ExecuteAsync(query, client);
                     MessageBox.Show("Client ajouté avec succès !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -118,6 +118,8 @@ namespace GestionPretBancaire.Repositories
                 MessageBox.Show($"Erreur inattendue :\n{ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+
         /// 
         /// 
         /// update an existing client in the database
@@ -129,9 +131,9 @@ namespace GestionPretBancaire.Repositories
             {
                 using (var conn = new DatabaseHelper().getConnection())
                 {
-                    string query = @"UPDATE CLIENT 
-                                   SET Nom = @Nom, 
-                                       Prenom = @Prenom, 
+                    string query = @"UPDATE Client 
+                                   SET NomClient = @Nom, 
+                                       PrenomClient = @Prenom, 
                                        NumTel = @NumTel, 
                                        Email = @Email, 
                                        Adresse = @Adresse, 
@@ -168,7 +170,7 @@ namespace GestionPretBancaire.Repositories
             {
                 using (var conn = new DatabaseHelper().getConnection())
                 {
-                    string query = "DELETE FROM CLIENT WHERE NumCompte = @NumCompte;";
+                    string query = "DELETE FROM Client WHERE NumCompte = @NumCompte;";
                     int rowsAffected = await conn.ExecuteAsync(query, new { NumCompte = numCompte });
                     return rowsAffected > 0;
                 }

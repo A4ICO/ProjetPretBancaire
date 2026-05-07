@@ -55,12 +55,11 @@ namespace GestionPretBancaire
                     return;
                 }
 
-                
                 var nouveauClient = new Client
                 {
                     NumCompte = txt_Compte.Text.Trim(),
-                    Nom = txt_Nom.Text.Trim(),
-                    Prenom = txt_Prenom.Text.Trim(),
+                    NomClient = txt_Nom.Text.Trim(),
+                    PrenomClient = txt_Prenom.Text.Trim(),
                     NumTel = txt_Tel.Text?.Trim(),
                     Email = txt_Email.Text.Trim(),
                     Adresse = txt_Adresse.Text?.Trim(),

@@ -50,8 +50,7 @@
             </Setter>
         </Style>
 
-        <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  -->
-
+        
         <Style x:Name="Bouton_Style" TargetType="Button">
             <Setter Property="Background" Value="#1F1F1F" />
             <Setter Property="Foreground" Value="White" />
@@ -86,7 +85,6 @@
         </Style>
     </Window.Resources>
 
-    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  -->
 
     <Grid Background="#1F1F1F">
         <TabControl>
@@ -102,7 +100,6 @@
 
             </TabItem>
 
-            <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  -->
 
             <TabItem Header="Client" Foreground="White">
                 <Grid Background="#2B2B2B">
@@ -181,214 +178,13 @@
 
             </TabItem>
 
-            <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  -->
 
             <TabItem Header="Pret" >
 
-                <Grid Background="#2B2B2B" Margin="5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="21*"/>
-                        <ColumnDefinition Width="755*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <StackPanel Margin="10,10,10,10" Grid.Row="0" Grid.ColumnSpan="2">
-
-                        <Button Content="Nouveau"  HorizontalAlignment="Right" Width="75" Margin="10" Padding="0, 5"/>
-
-                    </StackPanel>
-
-                    <!-- Replace your Releve_Pret ListView with this -->
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <ItemsControl x:Name="Releve_Pret" Margin="16">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel Orientation="Horizontal"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Margin="8" Width="300"
-                        Background="#FFFFFF"
-                        BorderBrush="#E5E7EB"
-                        BorderThickness="1"
-                        CornerRadius="12"
-                        Padding="20">
-                                        <Border.Effect>
-                                            <DropShadowEffect Color="#000000" Opacity="0.06"
-                                          BlurRadius="16" ShadowDepth="2"/>
-                                        </Border.Effect>
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="12"/>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="16"/>
-                                                <RowDefinition Height="Auto"/>
-                                            </Grid.RowDefinitions>
-
-                                            <!-- Header: Ref + Status badge -->
-                                            <Grid Grid.Row="0">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                </Grid.ColumnDefinitions>
-
-                                                <StackPanel Grid.Column="0">
-                                                    <TextBlock Text="Prêt" FontSize="11"
-                                           Foreground="#9CA3AF"
-                                           FontWeight="Medium"/>
-                                                    <TextBlock Text="{Binding Ref_Pret}"
-                                           FontSize="17"
-                                           FontWeight="SemiBold"
-                                           Foreground="#111827"/>
-                                                </StackPanel>
-
-                                                <!-- Status Badge -->
-                                                <Border Grid.Column="1"
-                                    CornerRadius="20"
-                                    Padding="10,4"
-                                    VerticalAlignment="Center">
-                                                    <Border.Style>
-                                                        <Style TargetType="Border">
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding Ref_Pret}" Value="Actif">
-                                                                    <Setter Property="Background" Value="#D1FAE5"/>
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding Nom_Client}" Value="Clôturé">
-                                                                    <Setter Property="Background" Value="#F3F4F6"/>
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding Prenom_Client}" Value="En attente">
-                                                                    <Setter Property="Background" Value="#FEF3C7"/>
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Border.Style>
-                                                    <TextBlock Text="{Binding Montant_Pret}"
-                                           FontSize="12" FontWeight="Medium">
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="TextBlock">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding Type_Pret}" Value="Actif">
-                                                                        <Setter Property="Foreground" Value="#065F46"/>
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Status_Pret}" Value="Clôturé">
-                                                                        <Setter Property="Foreground" Value="#6B7280"/>
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Status_Pret}" Value="En attente">
-                                                                        <Setter Property="Foreground" Value="#92400E"/>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
-                                                </Border>
-                                            </Grid>
-
-                                            <!-- Divider -->
-                                            <Separator Grid.Row="1"
-                                   Background="#F3F4F6"
-                                   Margin="0,0,0,0"/>
-
-                                            <!-- Client Info -->
-                                            <StackPanel Grid.Row="2" Orientation="Horizontal">
-                                                <!-- Avatar circle -->
-                                                <Border Width="38" Height="38"
-                                    CornerRadius="19"
-                                    Background="#EEF2FF"
-                                    Margin="0,0,12,0">
-                                                    <TextBlock VerticalAlignment="Center"
-                                           HorizontalAlignment="Center"
-                                           FontSize="13" FontWeight="SemiBold"
-                                           Foreground="#4F46E5">
-                                    <!-- Shows first letters of Nom + Prenom -->
-                                                        <TextBlock.Text>
-                                                            <MultiBinding StringFormat="{}{0:0}{1:0}">
-                                                                <Binding Path="Nom_Client[0]"/>
-                                                                <Binding Path="Prenom_Client[0]"/>
-                                                            </MultiBinding>
-                                                        </TextBlock.Text>
-                                                    </TextBlock>
-                                                </Border>
-                                                <StackPanel VerticalAlignment="Center">
-                                                    <TextBlock FontSize="14" FontWeight="SemiBold"
-                                           Foreground="#1F2937">
-                                                        <TextBlock.Text>
-                                                            <MultiBinding StringFormat="{}{0} {1}">
-                                                                <Binding Path="Nom_Client"/>
-                                                                <Binding Path="Prenom_Client"/>
-                                                            </MultiBinding>
-                                                        </TextBlock.Text>
-                                                    </TextBlock>
-                                                    <TextBlock Text="{Binding Type_Pret}"
-                                           FontSize="12"
-                                           Foreground="#9CA3AF"/>
-                                                </StackPanel>
-                                            </StackPanel>
-
-                                            <!-- Financial Details -->
-                                            <Grid Grid.Row="4">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                </Grid.ColumnDefinitions>
-
-                                                <!-- Montant -->
-                                                <StackPanel Grid.Column="0"
-                                        Background="#F9FAFB"
-                                        Margin="0,0,6,0">
-                                                    <Border CornerRadius="8" Padding="12,10">
-                                                        <StackPanel>
-                                                            <TextBlock Text="Montant"
-                                                   FontSize="11"
-                                                   Foreground="#9CA3AF"
-                                                   FontWeight="Medium"/>
-                                                            <TextBlock FontSize="15"
-                                                   FontWeight="SemiBold"
-                                                   Foreground="#111827">
-                                                                <TextBlock.Text>
-                                                                    <Binding Path="Montant_Pret"
-                                                         StringFormat="{}{0:N0} Ar"/>
-                                                                </TextBlock.Text>
-                                                            </TextBlock>
-                                                        </StackPanel>
-                                                    </Border>
-                                                </StackPanel>
-
-                                                <!-- Taux -->
-                                                <StackPanel Grid.Column="1"
-                                        Background="#F9FAFB"
-                                        Margin="6,0,0,0">
-                                                    <Border CornerRadius="8" Padding="12,10">
-                                                        <StackPanel>
-                                                            <TextBlock Text="Taux d'intérêt"
-                                                   FontSize="11"
-                                                   Foreground="#9CA3AF"
-                                                   FontWeight="Medium"/>
-                                                            <TextBlock FontSize="15"
-                                                   FontWeight="SemiBold"
-                                                   Foreground="#111827">
-                                                                <TextBlock.Text>
-                                                                    <Binding Path="Taux_Interet"
-                                                         StringFormat="{}{0:0.##} %"/>
-                                                                </TextBlock.Text>
-                                                            </TextBlock>
-                                                        </StackPanel>
-                                                    </Border>
-                                                </StackPanel>
-                                            </Grid>
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </Grid>
+                <ScrollViewer>
+                    <Grid x:Name="PretList" Background="#2B2B2B">
+                    </Grid>
+                </ScrollViewer>
 
             </TabItem>
         </TabControl>

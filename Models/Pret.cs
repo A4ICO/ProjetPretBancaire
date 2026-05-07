@@ -9,6 +9,7 @@
         public decimal TauxInteret { get; set; }
         public string? Status { get; set; }
         public string? DateCreation { get; set; }
+        public string? DateFin { get; set; }
         public List<Echeance>? Echeances { get; set; }
 
         public double GetMontant() {  return Montant; }
