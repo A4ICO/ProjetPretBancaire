@@ -65,6 +65,7 @@ namespace GestionPretBancaire.ViewModels
         }
 
 
+
         /// 
         /// 
         /// Update an existing pret in the database
@@ -84,6 +85,7 @@ namespace GestionPretBancaire.ViewModels
                 return false;
             }
         }
+
 
 
         /// 
