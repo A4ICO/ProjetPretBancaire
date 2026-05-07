@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using GestionPretBancaire.Helpers;
+using System.Windows;
 using System.Windows.Automation;
 
 namespace GestionPretBancaire.Models
@@ -20,30 +21,26 @@ namespace GestionPretBancaire.Models
 
         public async Task<List<PretViewModel?>> GetAllWithOwner()
         {
-            string query = @"
-                SELECT p.ReferencePret, c.NomClient, c.PrenomClient,
-                c.NumCompte, p.Montant, p.TauxInteret, 
-                p.DateCreation,p.DateFin, p.TypePret, p.statusPret
-                FROM Pret p
-                INNER JOIN Client c ON p.NumCompte = c.NumCompte;";
+            string query ="SELECT p.ReferencePret, p.NumCompte, c.NomClient, c.PrenomClient, " +
+                "p.Montant, p.TauxTnteret, p.TypePret, p.SatusPret, " +
+                "p.DateCreation, p.DateFin " +
+                "FROM Pret p LEFT JOIN Client c ON p.NumCompte = c.NumCompte";
 
             try
             {
-
                 using (var conn = new DatabaseHelper().getConnection())
                 {
                     var result = await conn.QueryAsync<PretViewModel>(query);
-                   return result.ToList();
+                    return result.AsList();
                 }
-
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error fetching data: {ex.Message}");
-                return null;
+                MessageBox.Show($"SQL Error: {ex.Message}\n{ex.InnerException?.Message}");
+                return new List<PretViewModel?>();
             }
-           }
         }
+    }
     }
 
 

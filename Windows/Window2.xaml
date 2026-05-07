@@ -1,0 +1,513 @@
+﻿<Window x:Class="GestionPretBancaire.Windows.AddPretWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+       
+        xmlns:local="clr-namespace:GestionPretBancaire.Windows"
+
+        mc:Ignorable="d"
+           WindowStartupLocation="CenterScreen"
+   ResizeMode="NoResize"
+    Title="Window1" Height="810" Width="800">
+
+
+
+
+<Window.Resources>
+
+        <!-- ===== BRUSHES ===== -->
+        <SolidColorBrush x:Key="BrBgDeep"    Color="#0F1117"/>
+        <SolidColorBrush x:Key="BrBgPanel"   Color="#161820"/>
+        <SolidColorBrush x:Key="BrBgCard"    Color="#1E2030"/>
+        <SolidColorBrush x:Key="BrBorder"    Color="#1F2235"/>
+        <SolidColorBrush x:Key="BrAccent"    Color="#6366F1"/>
+        <SolidColorBrush x:Key="BrTextPrimary" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="BrTextMuted" Color="#6B7280"/>
+        <SolidColorBrush x:Key="BrTextSub"   Color="#9CA3AF"/>
+
+        <!-- ===== TEXT INPUT STYLE ===== -->
+        <Style x:Key="DarkInput" TargetType="TextBox">
+            <Setter Property="Background"        Value="#161820"/>
+            <Setter Property="Foreground"        Value="White"/>
+            <Setter Property="CaretBrush"        Value="White"/>
+            <Setter Property="BorderBrush"       Value="#1F2235"/>
+            <Setter Property="BorderThickness"   Value="1"/>
+            <Setter Property="Padding"           Value="12,10"/>
+            <Setter Property="FontSize"          Value="13"/>
+            <Setter Property="Height"            Value="40"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="Bg"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="7">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="Bg" Property="BorderBrush" Value="#6366F1"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bg" Property="BorderBrush" Value="#2A2D45"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ===== COMBO BOX STYLE ===== -->
+        <Style x:Key="DarkCombo" TargetType="ComboBox">
+            <Setter Property="Background"       Value="#161820"/>
+            <Setter Property="Foreground"       Value="White"/>
+            <Setter Property="BorderBrush"      Value="#1F2235"/>
+            <Setter Property="BorderThickness"  Value="1"/>
+            <Setter Property="Padding"          Value="12,10"/>
+            <Setter Property="FontSize"         Value="13"/>
+            <Setter Property="Height"           Value="40"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="Bg"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="7"/>
+                            <ToggleButton Background="Transparent" BorderThickness="0"
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay,
+                                                      RelativeSource={RelativeSource TemplatedParent}}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="30"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Grid.ColumnSpan="2" Background="Transparent"/>
+                                            <TextBlock Grid.Column="1" Text="▾" FontSize="11"
+                                                       Foreground="#6B7280"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <ContentPresenter Content="{TemplateBinding SelectionBoxItem}"
+                                              Margin="12,0,30,0"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Left"/>
+                            <Popup IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True" Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Border Background="#1E2030"
+                                        BorderBrush="#2A2D45" BorderThickness="1"
+                                        CornerRadius="7" MinWidth="{TemplateBinding ActualWidth}"
+                                        MaxHeight="200">
+                                    <ScrollViewer>
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="Bg" Property="BorderBrush" Value="#6366F1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="Background"  Value="Transparent"/>
+                        <Setter Property="Foreground"  Value="#9CA3AF"/>
+                        <Setter Property="Padding"     Value="12,9"/>
+                        <Setter Property="FontSize"    Value="13"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#252840"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#1A1C3A"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ===== PRIMARY BUTTON ===== -->
+        <Style x:Key="BtnPrimary" TargetType="Button">
+            <Setter Property="Background"      Value="#6366F1"/>
+            <Setter Property="Foreground"      Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize"        Value="13"/>
+            <Setter Property="FontWeight"      Value="SemiBold"/>
+            <Setter Property="Height"          Value="42"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bg" Background="{TemplateBinding Background}"
+                                CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="#7274F3"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="#5254CC"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ===== CANCEL BUTTON ===== -->
+        <Style x:Key="BtnCancel" TargetType="Button" BasedOn="{StaticResource BtnPrimary}">
+            <Setter Property="Background"  Value="#1E2030"/>
+            <Setter Property="Foreground"  Value="#9CA3AF"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bg"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="#2A2D45" BorderThickness="1"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="#252840"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ===== LABEL STYLE ===== -->
+        <Style x:Key="FieldLabel" TargetType="TextBlock">
+            <Setter Property="FontSize"   Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#6B7280"/>
+            <Setter Property="Margin"     Value="0,0,0,6"/>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ===== HEADER ===== -->
+        <Border Grid.Row="0"
+                Background="#161820"
+                BorderBrush="#1F2235"
+                BorderThickness="0,0,0,1"
+                Padding="28,20">
+            <StackPanel Orientation="Horizontal">
+                <Border Background="#6366F1" CornerRadius="8"
+                        Width="36" Height="36" Margin="0,0,14,0">
+                    <TextBlock Text="+" FontSize="22" FontWeight="Bold"
+                               Foreground="White"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Nouveau Prêt"
+                               FontSize="16" FontWeight="SemiBold"
+                               Foreground="White"/>
+                    <TextBlock Text="Remplissez les informations du prêt"
+                               FontSize="12" Foreground="#6B7280"
+                               Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- ===== FORM BODY ===== -->
+        <ScrollViewer Grid.Row="1"
+                      VerticalScrollBarVisibility="Auto"
+                      Background="#0F1117">
+            <StackPanel Margin="28,24,28,8">
+
+                <!-- CLIENT SEARCH SECTION -->
+                <Border Background="#1E2030"
+                        BorderBrush="#1F2235"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="16"
+                        Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="CLIENT" Style="{StaticResource FieldLabel}" Margin="0,0,0,10"/>
+
+                        <!-- Search box -->
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="TxtClientSearch"
+                                     Style="{StaticResource DarkInput}"
+                                     Tag="Rechercher un client..."
+                                     TextChanged="TxtClientSearch_TextChanged">
+                                <TextBox.Template>
+                                    <ControlTemplate TargetType="TextBox">
+                                        <Border x:Name="Bg"
+                                                Background="#161820"
+                                                BorderBrush="#1F2235"
+                                                BorderThickness="1"
+                                                CornerRadius="7,0,0,7">
+                                            <Grid>
+                                                <TextBlock x:Name="Placeholder"
+                                                           Text="🔍  Rechercher par nom, prénom ou N° compte…"
+                                                           Foreground="#4B5563"
+                                                           FontSize="13"
+                                                           Margin="12,0,0,0"
+                                                           VerticalAlignment="Center"
+                                                           IsHitTestVisible="False"
+                                                           Visibility="Visible"/>
+                                                <ScrollViewer x:Name="PART_ContentHost"
+                                                              Margin="12,0"
+                                                              VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsFocused" Value="True">
+                                                <Setter TargetName="Bg" Property="BorderBrush" Value="#6366F1"/>
+                                            </Trigger>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter TargetName="Placeholder" Property="Visibility" Value="Visible"/>
+                                            </Trigger>
+                                            <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource Self}}" Value="">
+                                                <Setter TargetName="Placeholder" Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </TextBox.Template>
+                            </TextBox>
+                        </Grid>
+
+                        <!-- Search results dropdown -->
+                        <Border x:Name="SearchResultsPanel"
+                                Background="#161820"
+                                BorderBrush="#2A2D45"
+                                BorderThickness="1"
+                                CornerRadius="7"
+                                Visibility="Collapsed"
+                                Margin="0,0,0,10">
+                            <ListBox x:Name="LstClientResults"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     MaxHeight="160"
+                                     SelectionChanged="LstClientResults_SelectionChanged">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="Foreground" Value="#9CA3AF"/>
+                                        <Setter Property="Padding"    Value="12,9"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#252840"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                            </Trigger>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="#1A1C3A"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock FontSize="13" FontWeight="SemiBold" Foreground="White">
+                                                <Run Text="{Binding PrenomClient}"/>
+                                                <Run Text=" "/>
+                                                <Run Text="{Binding NomClient}"/>
+                                            </TextBlock>
+                                            <TextBlock FontSize="11" Foreground="#6B7280"
+                                                       Margin="0,2,0,0">
+                                                <Run Text="N° "/>
+                                                <Run Text="{Binding NumCompte}"/>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Border>
+
+                        <!-- Selected client chip -->
+                        <Border x:Name="SelectedClientBadge"
+                                Background="#1A1C3A"
+                                BorderBrush="#3730A3"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                Padding="12,10"
+                                Visibility="Collapsed">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0"
+                                        Background="#6366F1" CornerRadius="14"
+                                        Width="28" Height="28" Margin="0,0,10,0">
+                                    <TextBlock x:Name="TxtSelectedInitials"
+                                               FontSize="11" FontWeight="SemiBold"
+                                               Foreground="White"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock x:Name="TxtSelectedClientName"
+                                               FontSize="13" FontWeight="SemiBold"
+                                               Foreground="White"/>
+                                    <TextBlock x:Name="TxtSelectedClientAccount"
+                                               FontSize="11" Foreground="#6B7280"
+                                               Margin="0,2,0,0"/>
+                                </StackPanel>
+
+                                <Button Grid.Column="2"
+                                        Content="✕"
+                                        Width="24" Height="24"
+                                        Background="Transparent"
+                                        Foreground="#6B7280"
+                                        BorderThickness="0"
+                                        Cursor="Hand"
+                                        FontSize="12"
+                                        VerticalAlignment="Center"
+                                        Click="BtnClearClient_Click"/>
+                            </Grid>
+                        </Border>
+
+                    </StackPanel>
+                </Border>
+
+                <!-- LOAN DETAILS SECTION -->
+                <Border Background="#1E2030"
+                        BorderBrush="#1F2235"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="16"
+                        Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="DÉTAILS DU PRÊT" Style="{StaticResource FieldLabel}" Margin="0,0,0,14"/>
+
+                        <!-- Montant -->
+                        <TextBlock Text="MONTANT (€)" Style="{StaticResource FieldLabel}"/>
+                        <TextBox x:Name="TxtMontant"
+                                 Style="{StaticResource DarkInput}"
+                                 Margin="0,0,0,14"/>
+
+                        <!-- Taux + Durée side by side -->
+                        <Grid Margin="0,0,0,14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="TAUX D'INTÉRÊT (%)" Style="{StaticResource FieldLabel}"/>
+                                <TextBox x:Name="TxtTaux"
+                                         Style="{StaticResource DarkInput}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="DURÉE (MOIS)" Style="{StaticResource FieldLabel}"/>
+                                <TextBox x:Name="TxtDuree"
+                                         Style="{StaticResource DarkInput}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Type de prêt -->
+                        <TextBlock Text="TYPE DE PRÊT" Style="{StaticResource FieldLabel}"/>
+                        <ComboBox x:Name="CmbTypePret"
+                                  Style="{StaticResource DarkCombo}"
+                                  Margin="0,0,0,14">
+                            <ComboBoxItem Content="Personnel"/>
+                            <ComboBoxItem Content="Immobilier"/>
+                            <ComboBoxItem Content="Auto"/>
+                            <ComboBoxItem Content="Professionnel"/>
+                            <ComboBoxItem Content="Étudiant"/>
+                        </ComboBox>
+
+                        <!-- Statut -->
+                        <TextBlock Text="STATUT" Style="{StaticResource FieldLabel}"/>
+                        <ComboBox x:Name="CmbStatut"
+                                  Style="{StaticResource DarkCombo}"
+                                  Margin="0,0,0,14">
+                            <ComboBoxItem Content="Actif"/>
+                            <ComboBoxItem Content="En attente"/>
+                            <ComboBoxItem Content="Clôturé"/>
+                        </ComboBox>
+
+                        <!-- Dates side by side -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="DATE DE CRÉATION" Style="{StaticResource FieldLabel}"/>
+                                <TextBox x:Name="TxtDateCreation"
+                                         Style="{StaticResource DarkInput}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="DATE DE FIN" Style="{StaticResource FieldLabel}"/>
+                                <TextBox x:Name="TxtDateFin"
+                                         Style="{StaticResource DarkInput}">
+                                </TextBox>
+                            </StackPanel>
+                        </Grid>
+
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- ===== FOOTER BUTTONS ===== -->
+        <Border Grid.Row="2"
+                Background="#161820"
+                BorderBrush="#1F2235"
+                BorderThickness="0,1,0,0"
+                Padding="28,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"
+                        Content="Annuler"
+                        Style="{StaticResource BtnCancel}"
+                        Click="BtnAnnuler_Click"/>
+                <Button Grid.Column="2"
+                        Content="Enregistrer le prêt"
+                        Style="{StaticResource BtnPrimary}"
+                        Click="BtnEnregistrer_Click"/>
+            </Grid>
+        </Border>
+
+    </Grid>
+</Window>

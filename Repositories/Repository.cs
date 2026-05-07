@@ -2,6 +2,7 @@
 using GestionPretBancaire.Models;
 using Dapper;
 using LinqToDB.SqlQuery;
+using System.Windows;
 
 namespace GestionPretBancaire.Repositories
 {
@@ -22,7 +23,9 @@ namespace GestionPretBancaire.Repositories
             }
 
             catch(SqlException ex) { throw new Exception(ex.Message);}
-            catch(Exception ex){return new List<Pret>();}
+            catch(Exception ex){
+                MessageBox.Show(ex.Message);
+                return new List<Pret>();}
         }
 
         //public async Task GetClientInfoAsync(Client client)

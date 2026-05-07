@@ -9,7 +9,8 @@ namespace GestionPretBancaire.Services
     class S_LoadPrets
     {
         private readonly ObservableCollection<Client> listeClients = new();
-        private readonly ObservableCollection<PretViewModel> listePrets = new();
+        private readonly ObservableCollection<PretViewModel> listePrets = new() ;
+
 
         public async Task Charger_Pret(Grid grid)
         {
@@ -117,7 +118,7 @@ namespace GestionPretBancaire.Services
 
                 contentPanel.Children.Add(new TextBlock
                 {
-                    Text = $"Statut: {pret.DateCreation}",
+                    Text = $"Date Creation: {pret.DateCreation}",
                     Foreground = Brushes.White
                 });
 
@@ -135,8 +136,10 @@ namespace GestionPretBancaire.Services
                 {
                     col = 0;
                     row++;
-                }
+                
             }
         }
+    }
+   
     }
 }

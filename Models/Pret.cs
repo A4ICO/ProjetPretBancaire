@@ -12,12 +12,18 @@
         public string? DateFin { get; set; }
         public List<Echeance>? Echeances { get; set; }
 
-        public double GetMontant() {  return Montant; }
+
+        public Pret(double montant) {
+        Montant = montant;
+        }
+
+        public double GetMontant() { return Montant; }
         public void SetMontant(double montant)
         {
+            this.Montant = montant;
             if (montant <= 0)
                 throw new ArgumentException("Le montant doit être supérieur à 0.");
-            Montant = montant;
+
         }
 
     }

@@ -5,44 +5,86 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GestionPretBancaire"
         mc:Ignorable="d"
-        Title="MainWindow" Height="900" Width="1450">
+        Title="GestPrêt — Gestion Bancaire"
+        Height="900" Width="1450"
+        Background="#0F1117"
+        WindowStyle="SingleBorderWindow">
+
     <Window.Resources>
 
-        <Style TargetType="TabControl">
-            <Setter Property="Background" Value="#1F1F1F"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="Padding" Value="5"/>
+        <!-- ===== COLOR PALETTE ===== -->
+        <Color x:Key="BgDeep">#0F1117</Color>
+        <Color x:Key="BgPanel">#161820</Color>
+        <Color x:Key="BgCard">#1E2030</Color>
+        <Color x:Key="BgHover">#252840</Color>
+        <Color x:Key="AccentPurple">#6366F1</Color>
+        <Color x:Key="AccentPurpleHover">#7274F3</Color>
+        <Color x:Key="TextPrimary">#FFFFFF</Color>
+        <Color x:Key="TextMuted">#6B7280</Color>
+        <Color x:Key="TextSub">#9CA3AF</Color>
+        <Color x:Key="BorderSubtle">#1F2235</Color>
+        <Color x:Key="GreenBadge">#4ADE80</Color>
+        <Color x:Key="AmberBadge">#FBBF24</Color>
+        <Color x:Key="RedBadge">#F87171</Color>
+
+        <SolidColorBrush x:Key="BrBgDeep"    Color="{StaticResource BgDeep}"/>
+        <SolidColorBrush x:Key="BrBgPanel"   Color="{StaticResource BgPanel}"/>
+        <SolidColorBrush x:Key="BrBgCard"    Color="{StaticResource BgCard}"/>
+        <SolidColorBrush x:Key="BrBgHover"   Color="{StaticResource BgHover}"/>
+        <SolidColorBrush x:Key="BrAccent"    Color="{StaticResource AccentPurple}"/>
+        <SolidColorBrush x:Key="BrTextPrimary" Color="{StaticResource TextPrimary}"/>
+        <SolidColorBrush x:Key="BrTextMuted" Color="{StaticResource TextMuted}"/>
+        <SolidColorBrush x:Key="BrTextSub"   Color="{StaticResource TextSub}"/>
+        <SolidColorBrush x:Key="BrBorder"    Color="{StaticResource BorderSubtle}"/>
+
+        <!-- ===== SCROLLBAR STYLE ===== -->
+        <Style TargetType="ScrollBar">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Width" Value="6"/>
+        </Style>
+        <Style TargetType="ScrollViewer">
+            <Setter Property="Background" Value="Transparent"/>
         </Style>
 
-        <Style TargetType="TabItem">
-            <Setter Property="Background" Value="#1F1F1F"/>
-            <Setter Property="Foreground" Value="White"/>
+        <!-- ===== TAB CONTROL ===== -->
+        <Style TargetType="TabControl">
+            <Setter Property="Background"       Value="Transparent"/>
+            <Setter Property="BorderThickness"  Value="0"/>
+            <Setter Property="Padding"          Value="0"/>
+            <Setter Property="TabStripPlacement" Value="Left"/>
+        </Style>
 
+        <!-- ===== TAB ITEM (sidebar nav) ===== -->
+        <Style TargetType="TabItem">
+            <Setter Property="Background"  Value="Transparent"/>
+            <Setter Property="Foreground"  Value="{StaticResource BrTextMuted}"/>
+            <Setter Property="Padding"     Value="0"/>
+            <Setter Property="Margin"      Value="0"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TabItem">
-                        <Border x:Name="Bordure"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="Black"
-                                BorderThickness="2"
-                                CornerRadius="8"
-                                Padding="20,5">
-                            <ContentPresenter ContentSource="Header"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              RecognizesAccessKey="True"/>
+                        <Border x:Name="NavBorder"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                BorderThickness="2,0,0,0"
+                                Padding="20,10,20,10"
+                                Margin="0,2,0,2">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <ContentPresenter x:Name="NavContent"
+                                                  ContentSource="Header"
+                                                  VerticalAlignment="Center"/>
+                            </StackPanel>
                         </Border>
-
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Bordure" Property="Background" Value="#1F1F1F"/>
-                                <Setter TargetName="Bordure" Property="BorderBrush" Value="#1565C0"/>
+                                <Setter TargetName="NavBorder" Property="Background"
+                                        Value="#1A1C2E"/>
+                                <Setter TargetName="NavBorder" Property="BorderBrush"
+                                        Value="{StaticResource BrAccent}"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bordure" Property="Background" Value="#2B2B2B"/>
-                                <Setter TargetName="Bordure" Property="BorderBrush" Value="#1565C0"/>
+                                <Setter TargetName="NavBorder" Property="Background"
+                                        Value="#151728"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -50,140 +92,459 @@
             </Setter>
         </Style>
 
-        
-        <Style x:Name="Bouton_Style" TargetType="Button">
-            <Setter Property="Background" Value="#1F1F1F" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="Cursor" Value="Hand" />
-
+        <!-- ===== PRIMARY BUTTON ===== -->
+        <Style x:Key="BtnPrimary" TargetType="Button">
+            <Setter Property="Background"   Value="{StaticResource BrAccent}"/>
+            <Setter Property="Foreground"   Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding"      Value="20,9"/>
+            <Setter Property="FontSize"     Value="13"/>
+            <Setter Property="Cursor"       Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bordure"
+                        <Border x:Name="Bg"
                                 Background="{TemplateBinding Background}"
-                                BorderBrush="Black"
-                                BorderThickness="2"
-                                CornerRadius="8"
+                                CornerRadius="7"
                                 Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bordure" Property="Background" Value="#2B2B2B"/>
-                                <Setter TargetName="Bordure" Property="BorderBrush" Value="#1565C0"/>
+                                <Setter TargetName="Bg" Property="Background" Value="#7274F3"/>
                             </Trigger>
-
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Bordure" Property="Background" Value="#1565C0"/>
-                                <Setter TargetName="Bordure" Property="BorderBrush" Value="#1565C0"/>
+                                <Setter TargetName="Bg" Property="Background" Value="#5254CC"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- ===== SECONDARY BUTTON ===== -->
+        <Style x:Key="BtnSecondary" TargetType="Button">
+            <Setter Property="Background"      Value="#1E2030"/>
+            <Setter Property="Foreground"      Value="{StaticResource BrTextSub}"/>
+            <Setter Property="BorderBrush"     Value="#2A2D45"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding"         Value="16,8"/>
+            <Setter Property="FontSize"        Value="13"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bg"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="7"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="#252840"/>
+                                <Setter TargetName="Bg" Property="BorderBrush" Value="#6366F1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ===== DANGER BUTTON ===== -->
+        <Style x:Key="BtnDanger" TargetType="Button" BasedOn="{StaticResource BtnSecondary}">
+            <Setter Property="Foreground"  Value="#F87171"/>
+            <Setter Property="BorderBrush" Value="#3A2020"/>
+            <Setter Property="Background"  Value="#1E1515"/>
+        </Style>
+
+        <!-- ===== DATAGRID ===== -->
+        <Style TargetType="DataGrid">
+            <Setter Property="Background"           Value="Transparent"/>
+            <Setter Property="Foreground"           Value="{StaticResource BrTextSub}"/>
+            <Setter Property="BorderThickness"      Value="0"/>
+            <Setter Property="GridLinesVisibility"  Value="None"/>
+            <Setter Property="RowBackground"        Value="Transparent"/>
+            <Setter Property="AlternatingRowBackground" Value="#181A2A"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#1F2235"/>
+            <Setter Property="CanUserResizeRows"    Value="False"/>
+            <Setter Property="SelectionMode"        Value="Single"/>
+            <Setter Property="SelectionUnit"        Value="FullRow"/>
+            <Setter Property="AutoGenerateColumns"  Value="False"/>
+            <Setter Property="CanUserAddRows"       Value="False"/>
+            <Setter Property="HeadersVisibility"    Value="Column"/>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background"     Value="#161820"/>
+            <Setter Property="Foreground"     Value="{StaticResource BrTextMuted}"/>
+            <Setter Property="FontWeight"     Value="SemiBold"/>
+            <Setter Property="FontSize"       Value="11"/>
+            <Setter Property="Padding"        Value="14,10"/>
+            <Setter Property="BorderBrush"    Value="#1F2235"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource BrTextSub}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1A1C30"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#1E2240"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DataGridCell">
+            <Setter Property="Padding"          Value="14,10"/>
+            <Setter Property="BorderThickness"  Value="0"/>
+            <Setter Property="Foreground"       Value="{StaticResource BrTextSub}"/>
+            <Setter Property="FontSize"         Value="13"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background"     Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Foreground"     Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
     </Window.Resources>
 
+    <!-- ============================================================ -->
+    <!--  ROOT LAYOUT: Sidebar + Main                                 -->
+    <!-- ============================================================ -->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
 
-    <Grid Background="#1F1F1F">
-        <TabControl>
-            <TabItem Header="Accueil" Foreground="White">
+        <!-- ==================== SIDEBAR ==================== -->
+        <Border Grid.Column="0"
+                Background="{StaticResource BrBgPanel}"
+                BorderBrush="{StaticResource BrBorder}"
+                BorderThickness="0,0,1,0">
+            <DockPanel>
 
-                <ScrollViewer>
-                    <Grid x:Name="Acceuil_grid" Background="#2B2B2B">
-                    </Grid>
-                </ScrollViewer>
-
-            </TabItem>
-
-
-            <TabItem Header="Client" Foreground="White">
-                <Grid Background="#2B2B2B">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-                        <Button Content="Ajouter" Margin="5" Padding="25,10" 
-            Background="#1F1F1F" Foreground="White" 
-            Click="Button_Click"/>
-
-                        <Button Content="Modifier" Margin="5" Padding="20,10" 
-            Background="#1F1F1F" Foreground="White" 
-            Click="BtnModifier_Click"/>
-
-                        <Button Content="Supprimer" Margin="5" Padding="15,10" 
-            Background="#1F1F1F" Foreground="White" 
-            Click="BtnSupprimer_Click"/>
+                <!-- Logo -->
+                <Border DockPanel.Dock="Top"
+                        Padding="20,24,20,20"
+                        BorderBrush="{StaticResource BrBorder}"
+                        BorderThickness="0,0,0,1"
+                        Margin="0,0,0,10">
+                    <StackPanel>
+                        <Border Background="{StaticResource BrAccent}"
+                                CornerRadius="9"
+                                Width="36" Height="36"
+                                HorizontalAlignment="Left"
+                                Margin="0,0,0,10">
+                            <TextBlock Text="G" FontSize="18" FontWeight="Bold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="GestPrêt"
+                                   FontSize="15" FontWeight="SemiBold"
+                                   Foreground="{StaticResource BrTextPrimary}"/>
+                        <TextBlock Text="Gestion Bancaire"
+                                   FontSize="11"
+                                   Foreground="{StaticResource BrTextMuted}"
+                                   Margin="0,2,0,0"/>
                     </StackPanel>
+                </Border>
 
-                    <StackPanel Grid.Row="1">
-                        <DataGrid x:Name="Tab_Client" AutoGenerateColumns="False" ItemsSource="{Binding Clients}" CanUserAddRows="False" ScrollViewer.CanContentScroll="True">
-                            <DataGrid.ColumnHeaderStyle>
-                                <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="Background" Value="#1F1F1F"/>
-                                    <Setter Property="Foreground" Value="White"/>
-                                    <Setter Property="FontWeight" Value="Bold"/>
-                                    <Setter Property="FontSize" Value="14"/>
-                                    <Setter Property="Padding" Value="10,8"/>
-                                    <Setter Property="BorderBrush" Value="Black"/>
-                                    <Setter Property="BorderThickness" Value="0,0,1,0"/>
-                                </Style>
-                            </DataGrid.ColumnHeaderStyle>
-
-                            <DataGrid.RowStyle>
-                                <Style TargetType="DataGridRow">
-                                    <Setter Property="Background" Value="#505050"/>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="#656565"/>
-                                            <Setter Property="Foreground" Value="White"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGrid.RowStyle>
-
-                            <DataGrid.CellStyle>
-                                <Style TargetType="DataGridCell">
-                                    <Setter Property="Padding" Value="10,5"/>
-                                    <Setter Property="BorderThickness" Value="0"/>
-                                    <Setter Property="Foreground" Value="White"/>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="#1565C0"/>
-                                            <Setter Property="Foreground" Value="White"/>
-                                            <Setter Property="BorderThickness" Value="0"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGrid.CellStyle>
-
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Nom" Binding="{Binding NomClient }" Width="*"/>
-                                <DataGridTextColumn Header="Prénom" Binding="{Binding PrenomClient }" Width="*"/>
-                                <DataGridTextColumn Header="Numero Telephone" Binding="{Binding NumTel }" Width="*"/>
-                                <DataGridTextColumn Header="CIN" Binding="{Binding NumCIN }" Width="*"/>
-                                <DataGridTextColumn Header="Email" Binding="{Binding Email }" Width="*"/>
-                                <DataGridTextColumn Header="Numero de compte" Binding="{Binding NumCompte }" Width="*"/>
-                                <DataGridTextColumn Header="Identification" Binding="{Binding Adresse }" Width="*"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                <!-- Settings at bottom -->
+                <Border DockPanel.Dock="Bottom"
+                        Padding="20,14"
+                        BorderBrush="{StaticResource BrBorder}"
+                        BorderThickness="0,1,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="⚙" FontSize="14"
+                                   Foreground="{StaticResource BrTextMuted}"
+                                   VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBlock Text="Paramètres" FontSize="13"
+                                   Foreground="{StaticResource BrTextMuted}"
+                                   VerticalAlignment="Center"/>
                     </StackPanel>
-                </Grid>
+                </Border>
 
-            </TabItem>
+                <!-- Nav label -->
+                <TextBlock DockPanel.Dock="Top"
+                           Text="NAVIGATION"
+                           FontSize="10" FontWeight="SemiBold"
+                           Foreground="{StaticResource BrTextMuted}"
+                           Margin="20,4,0,8"
+                         />
 
+                <!-- TabControl acts as sidebar nav -->
+                <TabControl x:Name="MainTabs"
+                            Background="Transparent"
+                            BorderThickness="0">
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="⬛ " FontSize="14" VerticalAlignment="Center" Margin="0,0,8,0"
+                                           Foreground="{StaticResource BrAccent}"/>
+                                <TextBlock Text="Accueil" FontSize="13"
+                                           Foreground="{StaticResource BrTextPrimary}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
 
-            <TabItem Header="Pret" >
+                        <!-- ========== ACCUEIL CONTENT ========== -->
+                        <DockPanel Background="{StaticResource BrBgDeep}">
 
-                <ScrollViewer>
-                    <Grid x:Name="PretList" Background="#2B2B2B">
-                    </Grid>
-                </ScrollViewer>
+                            <!-- Top bar -->
+                            <Border DockPanel.Dock="Top"
+                                    Background="{StaticResource BrBgPanel}"
+                                    BorderBrush="{StaticResource BrBorder}"
+                                    BorderThickness="0,0,0,1"
+                                    Padding="28,16">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="Tableau de bord"
+                                                   FontSize="16" FontWeight="SemiBold"
+                                                   Foreground="{StaticResource BrTextPrimary}"/>
+                                        <TextBlock Text="Vue d'ensemble des prêts actifs"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource BrTextMuted}"
+                                                   Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1"
+                                            Content="+ Nouveau prêt"
+                                            Style="{StaticResource BtnPrimary}"
+                                            Click="BtnNouveauPret_Click"/>
+                                </Grid>
+                            </Border>
 
-            </TabItem>
-        </TabControl>
+                            <!-- Stat cards row -->
+                            <Border DockPanel.Dock="Top" Padding="28,20,28,0">
+                                <UniformGrid Columns="4" Rows="1">
+                                    <!-- Card 1 -->
+                                    <Border Background="{StaticResource BrBgCard}"
+                                            CornerRadius="10" Margin="0,0,10,0"
+                                            BorderBrush="{StaticResource BrBorder}"
+                                            BorderThickness="1" Padding="16,14">
+                                        <StackPanel>
+                                            <TextBlock Text="PRÊTS ACTIFS" FontSize="10" FontWeight="SemiBold"
+                                                       Foreground="{StaticResource BrTextMuted}"
+                                                       Margin="0,0,0,6"/>
+                                            <TextBlock Text="24" FontSize="26" FontWeight="Bold"
+                                                       Foreground="{StaticResource BrTextPrimary}"/>
+                                            <TextBlock Text="↑ +3 ce mois" FontSize="11"
+                                                       Foreground="#4ADE80" Margin="0,4,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <!-- Card 2 -->
+                                    <Border Background="{StaticResource BrBgCard}"
+                                            CornerRadius="10" Margin="5,0"
+                                            BorderBrush="{StaticResource BrBorder}"
+                                            BorderThickness="1" Padding="16,14">
+                                        <StackPanel>
+                                            <TextBlock Text="VOLUME TOTAL" FontSize="10" FontWeight="SemiBold"
+                                                       Foreground="{StaticResource BrTextMuted}"
+                                                       Margin="0,0,0,6"/>
+                                            <TextBlock Text="€ 840K" FontSize="26" FontWeight="Bold"
+                                                       Foreground="{StaticResource BrTextPrimary}"/>
+                                            <TextBlock Text="↑ +12%" FontSize="11"
+                                                       Foreground="#4ADE80" Margin="0,4,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <!-- Card 3 -->
+                                    <Border Background="{StaticResource BrBgCard}"
+                                            CornerRadius="10" Margin="5,0"
+                                            BorderBrush="{StaticResource BrBorder}"
+                                            BorderThickness="1" Padding="16,14">
+                                        <StackPanel>
+                                            <TextBlock Text="TAUX MOYEN" FontSize="10" FontWeight="SemiBold"
+                                                       Foreground="{StaticResource BrTextMuted}"
+                                                       Margin="0,0,0,6"/>
+                                            <TextBlock Text="4.2 %" FontSize="26" FontWeight="Bold"
+                                                       Foreground="{StaticResource BrTextPrimary}"/>
+                                            <TextBlock Text="— stable" FontSize="11"
+                                                       Foreground="{StaticResource BrTextMuted}"
+                                                       Margin="0,4,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <!-- Card 4 -->
+                                    <Border Background="{StaticResource BrBgCard}"
+                                            CornerRadius="10" Margin="10,0,0,0"
+                                            BorderBrush="{StaticResource BrBorder}"
+                                            BorderThickness="1" Padding="16,14">
+                                        <StackPanel>
+                                            <TextBlock Text="EN RETARD" FontSize="10" FontWeight="SemiBold"
+                                                       Foreground="{StaticResource BrTextMuted}"
+                                                       Margin="0,0,0,6"/>
+                                            <TextBlock Text="2" FontSize="26" FontWeight="Bold"
+                                                       Foreground="#F87171"/>
+                                            <TextBlock Text="↑ +1" FontSize="11"
+                                                       Foreground="#F87171" Margin="0,4,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </UniformGrid>
+                            </Border>
+
+                            <!-- Section label -->
+                            <Border DockPanel.Dock="Top" Padding="28,20,28,10">
+                                <TextBlock Text="PRÊTS RÉCENTS"
+                                           FontSize="10" FontWeight="SemiBold"
+                                           Foreground="{StaticResource BrTextMuted}"/>
+                            </Border>
+
+                            <!-- Loan cards grid -->
+                            <ScrollViewer DockPanel.Dock="Top"
+                                          VerticalScrollBarVisibility="Auto"
+                                          Padding="28,0,28,28">
+                                <Grid x:Name="Acceuil_grid">
+                                    <!-- Populated by Charger_Pret() in code-behind -->
+                                </Grid>
+                            </ScrollViewer>
+
+                        </DockPanel>
+                    </TabItem>
+
+                    <!-- ==================== CLIENT TAB ==================== -->
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="👤 " FontSize="14" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Clients" FontSize="13"
+                                           Foreground="{StaticResource BrTextSub}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+
+                        <DockPanel Background="{StaticResource BrBgDeep}">
+
+                            <!-- Top bar -->
+                            <Border DockPanel.Dock="Top"
+                                    Background="{StaticResource BrBgPanel}"
+                                    BorderBrush="{StaticResource BrBorder}"
+                                    BorderThickness="0,0,0,1"
+                                    Padding="28,16">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="Gestion des clients"
+                                                   FontSize="16" FontWeight="SemiBold"
+                                                   Foreground="{StaticResource BrTextPrimary}"/>
+                                        <TextBlock Text="Liste complète des clients enregistrés"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource BrTextMuted}"
+                                                   Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                    <!-- Action buttons -->
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <Button Content="+ Ajouter"
+                                                Style="{StaticResource BtnPrimary}"
+                                                Margin="0,0,8,0"
+                                                Click="Button_Click"/>
+                                        <Button Content="✏ Modifier"
+                                                Style="{StaticResource BtnSecondary}"
+                                                Margin="0,0,8,0"
+                                                Click="BtnModifier_Click"/>
+                                        <Button Content="🗑 Supprimer"
+                                                Style="{StaticResource BtnDanger}"
+                                                Click="BtnSupprimer_Click"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!-- DataGrid -->
+                            <Border Padding="28,20">
+                                <DataGrid x:Name="Tab_Client"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="NOM"          Binding="{Binding NomClient}"    Width="*"/>
+                                        <DataGridTextColumn Header="PRÉNOM"       Binding="{Binding PrenomClient}" Width="*"/>
+                                        <DataGridTextColumn Header="TÉLÉPHONE"    Binding="{Binding NumTel}"       Width="*"/>
+                                        <DataGridTextColumn Header="CIN"          Binding="{Binding NumCIN}"       Width="*"/>
+                                        <DataGridTextColumn Header="EMAIL"        Binding="{Binding Email}"        Width="*"/>
+                                        <DataGridTextColumn Header="N° COMPTE"    Binding="{Binding NumCompte}"    Width="*"/>
+                                        <DataGridTextColumn Header="ADRESSE"      Binding="{Binding Adresse}"      Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Border>
+
+                        </DockPanel>
+                    </TabItem>
+
+                    <!-- ==================== PRET TAB ==================== -->
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="💳 " FontSize="14" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Prêts" FontSize="13"
+                                           Foreground="{StaticResource BrTextSub}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+
+                        <DockPanel Background="{StaticResource BrBgDeep}">
+
+                            <!-- Top bar -->
+                            <Border DockPanel.Dock="Top"
+                                    Background="{StaticResource BrBgPanel}"
+                                    BorderBrush="{StaticResource BrBorder}"
+                                    BorderThickness="0,0,0,1"
+                                    Padding="28,16">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="Gestion des prêts"
+                                                   FontSize="16" FontWeight="SemiBold"
+                                                   Foreground="{StaticResource BrTextPrimary}"/>
+                                        <TextBlock Text="Tous les prêts en cours et archivés"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource BrTextMuted}"
+                                                   Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1"
+                                            Content="+ Nouveau prêt"
+                                            Style="{StaticResource BtnPrimary}"
+                                            Click="BtnNouveauPret_Click"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Section label -->
+                            <Border DockPanel.Dock="Top" Padding="28,20,28,10">
+                                <TextBlock Text="LISTE DES PRÊTS"
+                                           FontSize="10" FontWeight="SemiBold"
+                                           Foreground="{StaticResource BrTextMuted}"/>
+                            </Border>
+
+                            <!-- Scrollable card grid -->
+                            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                          Padding="28,0,28,28">
+                                <Grid x:Name="PretList">
+                                    <!-- Populated dynamically -->
+                                </Grid>
+                            </ScrollViewer>
+
+                        </DockPanel>
+                    </TabItem>
+
+                </TabControl>
+            </DockPanel>
+        </Border>
+
     </Grid>
 </Window>
