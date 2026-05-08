@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using GestionPretBancaire.Helpers;
 using GestionPretBancaire.Models;
+using LinqToDB.SqlQuery;
 using System.Windows;
 
 
@@ -103,11 +104,12 @@ namespace GestionPretBancaire.Repositories
                     return result.AsList();
                 }
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
                 return new List<Echeance>();
             }
+            
         }
 
         /// 

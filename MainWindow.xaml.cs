@@ -1,12 +1,14 @@
 ﻿using GestionPretBancaire.Managers;
 using GestionPretBancaire.Models;
+using GestionPretBancaire.Repositories;
 using GestionPretBancaire.Services;
 using GestionPretBancaire.ViewModels;
+using GestionPretBancaire.Windows;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
-using GestionPretBancaire.Windows;
 
 
 namespace GestionPretBancaire
@@ -15,18 +17,31 @@ namespace GestionPretBancaire
     {
         private readonly ClientManager _clientManager;
         private readonly PretManager _pretManager;
+        private readonly PretRepository _preRepo;
         private readonly ObservableCollection<PretViewModel> listePrets = new();
+        public  int _activePretCount  = 0;
+        private double totalMontant = 0;
+
 
         public MainWindow()
         {
             InitializeComponent();
 
-            _clientManager = new ClientManager(); // ✅ before use
-            _pretManager = new PretManager();     // ✅ before use
+            _clientManager = new ClientManager(); 
+            _pretManager = new PretManager();
 
             LoadClients();
             Charger_Pret(PretList);
         }
+
+
+        private void countPretActive()
+        { 
+            Count_pret.Text = _activePretCount.ToString();
+            Total.Text = totalMontant.ToString()  + " Ar";
+        }
+
+
         private async void LoadClients()
         {
 
@@ -91,19 +106,15 @@ namespace GestionPretBancaire
 
         public async Task Charger_Pret(Grid grid)
         {
-
             grid.Children.Clear();
             grid.RowDefinitions.Clear();
             grid.ColumnDefinitions.Clear();
+
             var _pretManager = new PretViewModel();
             var prets = await _pretManager.GetAllWithOwner();
 
-            //MessageBox.Show($"Loaded: {prets.Count} prets");
-            //listePrets.Clear();
-
             foreach (var p in prets)
             {
-
                 listePrets.Add(new PretViewModel
                 {
                     ReferencePret = p.ReferencePret,
@@ -116,36 +127,37 @@ namespace GestionPretBancaire
                     TypePret = p.TypePret ?? "N/A",
                     StatusPret = p.StatusPret ?? "N/A"
                 });
+                _activePretCount++;
+                totalMontant += p.Montant;
             }
-
-
 
             int row = 0;
             int col = 0;
-            int maxCols = 3; // Number of cards per row
+            int maxCols = 3;
 
-            // Define grid rows/columns dynamically
             grid.RowDefinitions.Clear();
             grid.ColumnDefinitions.Clear();
 
             for (int i = 0; i < maxCols; i++)
                 grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
 
-            // Create enough rows for all cards
             int totalRows = (int)Math.Ceiling((double)listePrets.Count / maxCols);
             for (int i = 0; i < totalRows; i++)
                 grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
 
             foreach (var pret in listePrets)
             {
-                // ── Card container 
+                // ── Capture for lambda 
+                var currentPret = pret;
+
+                // ── Card container
                 Border cardBorder = new Border
                 {
-                    Background = new SolidColorBrush(Color.FromRgb(30, 32, 48)),   // #1E2030
+                    Background = new SolidColorBrush(Color.FromRgb(30, 32, 48)),
                     CornerRadius = new CornerRadius(10),
                     Margin = new Thickness(0, 0, 12, 12),
                     Padding = new Thickness(16),
-                    BorderBrush = new SolidColorBrush(Color.FromRgb(31, 34, 53)),   // #1F2235
+                    BorderBrush = new SolidColorBrush(Color.FromRgb(31, 34, 53)),
                     BorderThickness = new Thickness(1)
                 };
 
@@ -157,7 +169,7 @@ namespace GestionPretBancaire
                     Text = pret.ReferencePret ?? "—",
                     FontSize = 11,
                     FontFamily = new FontFamily("Consolas"),
-                    Foreground = new SolidColorBrush(Color.FromRgb(107, 114, 128)),  // muted gray
+                    Foreground = new SolidColorBrush(Color.FromRgb(107, 114, 128)),
                     Margin = new Thickness(0, 0, 0, 10)
                 });
 
@@ -176,7 +188,7 @@ namespace GestionPretBancaire
                     Width = 30,
                     Height = 30,
                     CornerRadius = new CornerRadius(15),
-                    Background = new SolidColorBrush(Color.FromRgb(99, 102, 241)), // indigo
+                    Background = new SolidColorBrush(Color.FromRgb(99, 102, 241)),
                     Margin = new Thickness(0, 0, 10, 0),
                     VerticalAlignment = VerticalAlignment.Center
                 };
@@ -201,12 +213,12 @@ namespace GestionPretBancaire
                 });
                 contentPanel.Children.Add(nameRow);
 
-                // ── Helper: key / value row ─
+                // ── Helper: key / value row ──────────────────────────────────
                 void AddRow(string key, string value, Brush valueBrush = null)
                 {
-                    Grid row = new Grid { Margin = new Thickness(0, 0, 0, 6) };
-                    row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-                    row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                    Grid rowGrid = new Grid { Margin = new Thickness(0, 0, 0, 6) };
+                    rowGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+                    rowGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
                     TextBlock keyTb = new TextBlock
                     {
@@ -219,25 +231,24 @@ namespace GestionPretBancaire
                         Text = value,
                         FontSize = 12,
                         FontWeight = FontWeights.SemiBold,
-                        Foreground = valueBrush
-                                            ?? new SolidColorBrush(Color.FromRgb(156, 163, 175)),
+                        Foreground = valueBrush ?? new SolidColorBrush(Color.FromRgb(156, 163, 175)),
                         TextAlignment = TextAlignment.Right,
                         HorizontalAlignment = HorizontalAlignment.Right
                     };
 
                     Grid.SetColumn(keyTb, 0);
                     Grid.SetColumn(valTb, 1);
-                    row.Children.Add(keyTb);
-                    row.Children.Add(valTb);
-                    contentPanel.Children.Add(row);
+                    rowGrid.Children.Add(keyTb);
+                    rowGrid.Children.Add(valTb);
+                    contentPanel.Children.Add(rowGrid);
                 }
 
-                AddRow("Montant", $"{pret.Montant:C}",
-                    new SolidColorBrush(Color.FromRgb(165, 180, 252)));  // soft indigo
+                AddRow("Montant", $"{pret.Montant} Ar",
+                    new SolidColorBrush(Color.FromRgb(165, 180, 252)));
                 AddRow("Taux", $"{pret.TauxInteret} %");
                 AddRow("Type", pret.TypePret ?? "—");
 
-                // Divider 
+                // ── Divider
                 contentPanel.Children.Add(new Border
                 {
                     Height = 1,
@@ -258,15 +269,11 @@ namespace GestionPretBancaire
                     VerticalAlignment = VerticalAlignment.Center
                 });
 
-                // Badge color based on status
                 (Color bgColor, Color fgColor) = (pret.StatusPret ?? "").ToLower() switch
                 {
-                    "actif" => (Color.FromArgb(40, 74, 222, 128),
-                                     Color.FromRgb(74, 222, 128)),   // green
-                    "en attente" => (Color.FromArgb(40, 251, 191, 36),
-                                     Color.FromRgb(251, 191, 36)),   // amber
-                    _ => (Color.FromArgb(40, 248, 113, 113),
-                                     Color.FromRgb(248, 113, 113))    // red
+                    "actif" => (Color.FromArgb(40, 74, 222, 128), Color.FromRgb(74, 222, 128)),
+                    "en attente" => (Color.FromArgb(40, 251, 191, 36), Color.FromRgb(251, 191, 36)),
+                    _ => (Color.FromArgb(40, 248, 113, 113), Color.FromRgb(248, 113, 113))
                 };
 
                 Border badge = new Border
@@ -289,7 +296,58 @@ namespace GestionPretBancaire
                 footer.Children.Add(badge);
                 contentPanel.Children.Add(footer);
 
-                // ── Assemble and place in grid ─
+                // ── Info button (created fresh per card) ─────────────────────
+                var btnFactory = new FrameworkElementFactory(typeof(Border));
+                btnFactory.SetValue(Border.CornerRadiusProperty, new CornerRadius(7));
+                btnFactory.SetValue(Border.BackgroundProperty, new SolidColorBrush(Color.FromArgb(30, 99, 102, 241)));
+                btnFactory.SetValue(Border.BorderBrushProperty, new SolidColorBrush(Color.FromArgb(60, 99, 102, 241)));
+                btnFactory.SetValue(Border.BorderThicknessProperty, new Thickness(1));
+                btnFactory.SetValue(Border.PaddingProperty, new Thickness(0, 8, 0, 8));
+
+                var cpFactory = new FrameworkElementFactory(typeof(ContentPresenter));
+                cpFactory.SetValue(ContentPresenter.HorizontalAlignmentProperty, HorizontalAlignment.Center);
+                cpFactory.SetValue(ContentPresenter.VerticalAlignmentProperty, VerticalAlignment.Center);
+                btnFactory.AppendChild(cpFactory);
+
+                Button infoBtn = new Button
+                {
+                    Content = "Voir détails →",
+                    FontSize = 11,
+                    FontWeight = FontWeights.SemiBold,
+                    Foreground = new SolidColorBrush(Color.FromRgb(99, 102, 241)),
+                    Background = new SolidColorBrush(Color.FromArgb(30, 99, 102, 241)),
+                    BorderBrush = new SolidColorBrush(Color.FromArgb(60, 99, 102, 241)),
+                    BorderThickness = new Thickness(1),
+                    Padding = new Thickness(0, 8, 0, 8),
+                    Margin = new Thickness(0, 10, 0, 0),
+                    Cursor = Cursors.Hand,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    Template = new ControlTemplate(typeof(Button)) { VisualTree = btnFactory }
+                };
+
+                infoBtn.Click += (s, e) =>
+                {
+                    var w = new ShowEcheance();
+                    w.ShowDialog();
+                    MessageBox.Show(
+                        $"Référence : {currentPret.ReferencePret}\n" +
+                        $"Client    : {currentPret.PrenomClient} {currentPret.NomClient}\n" +
+                        $"Montant   : {currentPret.Montant} Ar\n" +
+                        $"Taux      : {currentPret.TauxInteret} %\n" +
+                        $"Type      : {currentPret.TypePret}\n" +
+                        $"Statut    : {currentPret.StatusPret}\n" +
+                        $"Créé le   : {currentPret.DateCreation}\n" +
+                        $"Date fin  : {currentPret.DateFin ?? "—"}",
+                        "Détails du prêt",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+
+
+                };
+
+                contentPanel.Children.Add(infoBtn);
+
+                // ── Assemble and place in grid ───────────────────────────────
                 cardBorder.Child = contentPanel;
                 Grid.SetRow(cardBorder, row);
                 Grid.SetColumn(cardBorder, col);
@@ -303,12 +361,12 @@ namespace GestionPretBancaire
                 }
             }
 
+            countPretActive();
         }
-    
 
         private void BtnNouveauPret_Click(object sender, RoutedEventArgs e)
         {
-            var w = new AddPretWindow();
+            var w = new AddNewPrettWindow();
 
             if (w.ShowDialog() == true)
                 Charger_Pret(PretList);

@@ -340,7 +340,7 @@
                                             <TextBlock Text="PRÊTS ACTIFS" FontSize="10" FontWeight="SemiBold"
                                                        Foreground="{StaticResource BrTextMuted}"
                                                        Margin="0,0,0,6"/>
-                                            <TextBlock Text="24" FontSize="26" FontWeight="Bold"
+                                            <TextBlock x:Name="Count_pret" Text="N/A" FontSize="26" FontWeight="Bold"
                                                        Foreground="{StaticResource BrTextPrimary}"/>
                                             <TextBlock Text="↑ +3 ce mois" FontSize="11"
                                                        Foreground="#4ADE80" Margin="0,4,0,0"/>
@@ -355,7 +355,7 @@
                                             <TextBlock Text="VOLUME TOTAL" FontSize="10" FontWeight="SemiBold"
                                                        Foreground="{StaticResource BrTextMuted}"
                                                        Margin="0,0,0,6"/>
-                                            <TextBlock Text="€ 840K" FontSize="26" FontWeight="Bold"
+                                            <TextBlock x:Name="Total" Text="N/A"  FontSize="26" FontWeight="Bold"
                                                        Foreground="{StaticResource BrTextPrimary}"/>
                                             <TextBlock Text="↑ +12%" FontSize="11"
                                                        Foreground="#4ADE80" Margin="0,4,0,0"/>

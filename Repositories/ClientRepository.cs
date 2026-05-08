@@ -94,6 +94,9 @@ namespace GestionPretBancaire.Repositories
         /// 
         public async Task AddAsync(Client client)
         {
+
+
+            MessageBox.Show($"Tentative d'ajout du client :\nNumCompte: {client.NumCompte}\nEmail: {client.Email}", "Debug", MessageBoxButton.OK, MessageBoxImage.Information);
             try
             {
                 using (var conn = new DatabaseHelper().getConnection())
@@ -127,7 +130,9 @@ namespace GestionPretBancaire.Repositories
         /// 
         public async Task UpdateAsync(Client client)
         {
+
             try
+            
             {
                 using (var conn = new DatabaseHelper().getConnection())
                 {

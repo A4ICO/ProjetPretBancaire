@@ -10,39 +10,68 @@ namespace GestionPretBancaire.Repositories
     public class PretRepository : IPretRepository
     {
         // ====================== ADD PRET ======================
+
         public async Task AddAsync(Pret pret)
         {
-            string query = @"INSERT INTO Pret (ReferencePret, NumCompte, TypePret , Montant, 
-                                             TauxInteret, StatusPret, DateCreation , DateFin , NumCompte) 
-                           VALUES (@ReferencePret, @NumCompte, @TypePret , @Montant, 
-                                   @TauxInteret, @StatusPret, @DateCreation ,@DateFin ,@NumCompte);";
+            string query = @"INSERT INTO Pret (NumCompte, TypePret, Montant, 
+                                       TauxTnteret, SatusPret, DateCreation, DateFin) 
+                     VALUES (@NumCompte, @TypePret, @Montant, 
+                             @TauxTnteret, @SatusPret, @DateCreation, @DateFin);";
 
             try
             {
                 using (var conn = new DatabaseHelper().getConnection())
                 {
-                    await conn.ExecuteAsync(query, pret);
-                    MessageBox.Show("Prêt ajouté avec succès !", "Succès",
-                                  MessageBoxButton.OK, MessageBoxImage.Information);
+                    await conn.OpenAsync();
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        // Map each parameter manually — no naming issues
+                        cmd.Parameters.AddWithValue("@NumCompte", pret.NumCompte);
+                        cmd.Parameters.AddWithValue("@TypePret", pret.TypePret);
+                        cmd.Parameters.AddWithValue("@Montant", pret.GetMontant());
+                        cmd.Parameters.AddWithValue("@TauxTnteret", pret.TauxInteret);
+                        cmd.Parameters.AddWithValue("@SatusPret", pret.Status);
+                        cmd.Parameters.AddWithValue("@DateCreation", pret.DateCreation);
+                        cmd.Parameters.AddWithValue("@DateFin",
+                            pret.DateFin);
+
+                        int rows = await cmd.ExecuteNonQueryAsync();
+
+                        if (rows > 0)
+                            MessageBox.Show("Prêt ajouté avec succès !", "Succès",
+                                            MessageBoxButton.OK, MessageBoxImage.Information);
+                        else
+                            MessageBox.Show("Aucune ligne insérée.", "Attention",
+                                            MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                 }
             }
             catch (MySqlException ex) when (ex.Number == 1062)
             {
                 MessageBox.Show("Un prêt avec cette référence existe déjà.", "Doublon",
-                              MessageBoxButton.OK, MessageBoxImage.Warning);
+                                MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             catch (MySqlException ex)
             {
-                MessageBox.Show($"Erreur de base de données :\n{ex.Message}", "Erreur",
-                              MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Erreur MySQL #{ex.Number}\n\n" +
+                    $"Message        : {ex.Message}\n\n" +
+                    $"InnerException : {ex.InnerException?.Message ?? "aucune"}",
+                    "Erreur MySQL",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erreur inattendue :\n{ex.Message}", "Erreur",
-                              MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Erreur inattendue\n\n" +
+                    $"Type           : {ex.GetType().Name}\n" +
+                    $"Message        : {ex.Message}\n\n" +
+                    $"InnerException : {ex.InnerException?.Message ?? "aucune"}",
+                    "Erreur",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         // ====================== GET ALL ======================
         public async Task<List<Pret>> GetAllAsync()
         {
@@ -118,8 +147,8 @@ namespace GestionPretBancaire.Repositories
                            SET NumCompte = @NumCompte,
                                TypePret = @TypePret,
                                Montant = @Montant,
-                               TauxInteret = @TauxInteret,
-                               StatusPret = @Status
+                               TauxTnteret = @TauxInteret,
+                               SatusPret = @Satus
                            WHERE ReferencePret = @Reference;";
 
             try
@@ -184,6 +213,28 @@ namespace GestionPretBancaire.Repositories
             catch (Exception)
             {
                 return false;
+            }
+
+
+        }
+
+        public async Task<int>  CountAsync()
+        {
+            string query = "SELECT COUNT(*) FROM Pret;";
+
+            try
+            {
+                using (var conn = new DatabaseHelper().getConnection())
+                {
+                  int count = await conn.ExecuteScalarAsync<int>(query);
+                return count;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show($"Erreur de base de données :\n{ex.Message}", "Erreur",
+                              MessageBoxButton.OK, MessageBoxImage.Error);
+                return 0;
             }
         }
     }
