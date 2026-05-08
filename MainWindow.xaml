@@ -217,9 +217,8 @@
 
     </Window.Resources>
 
-    <!-- ============================================================ -->
     <!--  ROOT LAYOUT: Sidebar + Main                                 -->
-    <!-- ============================================================ -->
+  
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

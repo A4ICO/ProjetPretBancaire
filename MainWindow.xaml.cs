@@ -117,6 +117,7 @@ namespace GestionPretBancaire
             {
                 listePrets.Add(new PretViewModel
                 {
+                  
                     ReferencePret = p.ReferencePret,
                     NomClient = p.NomClient ?? "N/A",
                     PrenomClient = p.PrenomClient ?? "N/A",
@@ -128,6 +129,7 @@ namespace GestionPretBancaire
                     StatusPret = p.StatusPret ?? "N/A"
                 });
                 _activePretCount++;
+                //MessageBox.Show($"{p.StatusPret} {p.TypePret} ");
                 totalMontant += p.Montant;
             }
 
@@ -263,7 +265,7 @@ namespace GestionPretBancaire
 
                 footer.Children.Add(new TextBlock
                 {
-                    Text = pret.DateCreation ?? "—",
+                    Text = pret.DateCreation ?? "",
                     FontSize = 11,
                     Foreground = new SolidColorBrush(Color.FromRgb(107, 114, 128)),
                     VerticalAlignment = VerticalAlignment.Center
@@ -327,21 +329,22 @@ namespace GestionPretBancaire
 
                 infoBtn.Click += (s, e) =>
                 {
-                    var w = new ShowEcheance();
-                    w.ShowDialog();
-                    MessageBox.Show(
-                        $"Référence : {currentPret.ReferencePret}\n" +
-                        $"Client    : {currentPret.PrenomClient} {currentPret.NomClient}\n" +
-                        $"Montant   : {currentPret.Montant} Ar\n" +
-                        $"Taux      : {currentPret.TauxInteret} %\n" +
-                        $"Type      : {currentPret.TypePret}\n" +
-                        $"Statut    : {currentPret.StatusPret}\n" +
-                        $"Créé le   : {currentPret.DateCreation}\n" +
-                        $"Date fin  : {currentPret.DateFin ?? "—"}",
-                        "Détails du prêt",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
 
+                    if (int.TryParse(currentPret.ReferencePret, out int refId))
+                    {
+                        //MessageBox.Show($"{refId}");
+                        var window = new ShowEcheance();
+                        window.ListAllEcheance(refId);
+                        window.ShowDialog();
+                        
+                    }
+                    else
+                    {
+                        MessageBox.Show("Référence invalide.", "Erreur",
+                                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+
+                   
 
                 };
 

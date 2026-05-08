@@ -5,26 +5,118 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GestionPretBancaire"
         mc:Ignorable="d"
-        Title="ShowEcheance" Height="450" Width="779">
-
-
+        Title="Échéances du prêt"
+        Height="520" Width="900"
+        Background="#0F1117"
+        WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
-        <Style TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#FF2D2D30"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>
-    </Window.Resources>
-    <Grid>
-        <Border Padding="28,20">
-            <DataGrid x:Name="Tab_Echeance"
-              AutoGenerateColumns="False"
-              CanUserAddRows="False">
 
-            </DataGrid>
+        <!-- ===== DATAGRID ===== -->
+        <Style TargetType="DataGrid">
+            <Setter Property="Background"               Value="Transparent"/>
+            <Setter Property="Foreground"               Value="#9CA3AF"/>
+            <Setter Property="BorderThickness"          Value="0"/>
+            <Setter Property="GridLinesVisibility"      Value="None"/>
+            <Setter Property="RowBackground"            Value="Transparent"/>
+            <Setter Property="AlternatingRowBackground" Value="#181A2A"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#1F2235"/>
+            <Setter Property="CanUserResizeRows"        Value="False"/>
+            <Setter Property="SelectionMode"            Value="Single"/>
+            <Setter Property="SelectionUnit"            Value="FullRow"/>
+            <Setter Property="AutoGenerateColumns"      Value="False"/>
+            <Setter Property="CanUserAddRows"           Value="False"/>
+            <Setter Property="HeadersVisibility"        Value="Column"/>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background"      Value="#161820"/>
+            <Setter Property="Foreground"      Value="#6B7280"/>
+            <Setter Property="FontWeight"      Value="SemiBold"/>
+            <Setter Property="FontSize"        Value="11"/>
+            <Setter Property="Padding"         Value="14,10"/>
+            <Setter Property="BorderBrush"     Value="#1F2235"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background"      Value="Transparent"/>
+            <Setter Property="Foreground"      Value="#9CA3AF"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1A1C30"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#1E2240"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DataGridCell">
+            <Setter Property="Padding"         Value="14,10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground"      Value="#9CA3AF"/>
+            <Setter Property="FontSize"        Value="13"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background"      Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Foreground"      Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ===== HEADER ===== -->
+        <Border Grid.Row="0"
+                Background="#161820"
+                BorderBrush="#1F2235"
+                BorderThickness="0,0,0,1"
+                Padding="28,18">
+            <StackPanel Orientation="Horizontal">
+                <Border Background="#6366F1" CornerRadius="8"
+                        Width="36" Height="36" Margin="0,0,14,0">
+                    <TextBlock Text="📅" FontSize="16"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Échéancier du prêt"
+                               FontSize="15" FontWeight="SemiBold"
+                               Foreground="White"/>
+                    <TextBlock Text="Liste des échéances de remboursement"
+                               FontSize="11" Foreground="#6B7280"
+                               Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
         </Border>
+
+        <!-- ===== DATAGRID ===== -->
+
+        <Border Grid.Row="1" Padding="24,20">
+            <DataGrid x:Name="Tab_Echeance"
+                      
+                      CanUserAddRows="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="CODE"           Binding="{Binding CodeEcheance}"   Width="*"/>
+                    <DataGridTextColumn Header="RÉFÉRENCE PRÊT" Binding="{Binding ReferencePret}"  Width="*"/>
+                    <DataGridTextColumn Header="DATE OPÉRATION" Binding="{Binding DateOperation}"  Width="*"/>
+                    <DataGridTextColumn Header="CAPITAL"        Binding="{Binding Capital}"        Width="*"/>
+                    <DataGridTextColumn Header="INTÉRÊT"        Binding="{Binding Interet}"        Width="*"/>
+                    <DataGridTextColumn Header="SOLDE RESTANT"  Binding="{Binding SoldeRestant}"   Width="*"/>
+                    <DataGridTextColumn Header="DATE PAIEMENT"  Binding="{Binding DatePaiement}"   Width="*"/>
+                    <DataGridTextColumn Header="STATUT"         Binding="{Binding StatutPaiement}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            </Border>
     </Grid>
+   
 </Window>

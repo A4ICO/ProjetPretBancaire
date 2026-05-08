@@ -8,44 +8,36 @@ namespace GestionPretBancaire
     public partial class ShowEcheance : Window
     {
         private readonly EcheanceRepository _repository = new();
-        private List<Echeance> _echeances = new();
-        private int _referencePret = 3;
+
+        private List<Echeance> _echeances = new() ;
 
         public ShowEcheance()
         {
             InitializeComponent();
         }
 
-        public ShowEcheance(int referencePret) 
-        {
-            //_referencePret = referencePret;
-            _ = ListAllEcheance(); // load on open
-        }
-
-        public async Task ListAllEcheance()
+        
+        public async Task ListAllEcheance( int reference)
         {
             try
             {
-                _echeances = await _repository.GetByReferencePretAsync(_referencePret);
 
+                _echeances = await _repository.GetByReferencePretAsync(reference);
 
-                if (_echeances.Count == 0)
-                    MessageBox.Show("Aucune échéance trouvée pour ce prêt.",
-                                    "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                //foreach (var echeance in _echeances)
+                //{
+                //    MessageBox.Show($"CodeEcheance: {echeance.CodeEcheance}, ReferencePret: {echeance.ReferencePret}, Date: {echeance.DateOperation}, Balance: {echeance.Capital}, Interet: {echeance.Interet}, SoldeRestant: {echeance.SoldeRestant}, Operation: {echeance.Operation}, DatePaiment: {echeance.DatePaiment}");
+                //}
 
-                MessageBox.Show($"Nombre d'échéances trouvées : {_echeances.Count}", "Résultat",
-                            MessageBoxButton.OK, MessageBoxImage.Information);
                 Tab_Echeance.ItemsSource = _echeances;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erreur :\n{ex.Message}", "Erreur",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Erreur :\n{ex.Message}\n{ex.InnerException?.Message}",
+                               "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-
-            
-
         }
     }
+
+   
 }

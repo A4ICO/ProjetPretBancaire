@@ -11,5 +11,6 @@
         public String?  Operation { get ; set ; }
         public String? DatePaiment {  get ; set; }
         public String? StatutPaiement { get; set; }
+
     }
 }

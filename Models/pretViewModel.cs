@@ -31,6 +31,11 @@ namespace GestionPretBancaire.Models
                 using (var conn = new DatabaseHelper().getConnection())
                 {
                     var result = await conn.QueryAsync<PretViewModel>(query);
+
+                    //foreach (var item in result)
+                    //{
+                    //    MessageBox.Show($"{item.Montant} {item.StatusPret}");
+                    //}
                     return result.AsList();
                 }
             }

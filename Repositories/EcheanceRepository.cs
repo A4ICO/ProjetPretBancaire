@@ -2,6 +2,7 @@
 using GestionPretBancaire.Helpers;
 using GestionPretBancaire.Models;
 using LinqToDB.SqlQuery;
+using MySql.Data.MySqlClient;
 using System.Windows;
 
 
@@ -95,22 +96,29 @@ namespace GestionPretBancaire.Repositories
         /// 
         public async Task<List<Echeance>> GetByReferencePretAsync(int _referencePret)
         {
-            string query = "SELECT * FROM Echeance WHERE ReferencePret = @referencePret;";
+            string query = "SELECT * FROM Echeance WHERE ReferencePret = @referencePret ORDER BY DateOperation;";
             try
             {
                 using (var connection = new DatabaseHelper().getConnection())
                 {
                     var result = await connection.QueryAsync<Echeance>(query, new { referencePret = _referencePret });
-                    return result.AsList();
+                    return result.ToList();
                 }
             }
+
             catch (SqlException ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
                 return new List<Echeance>();
             }
-            
+
         }
+
+
+
+
+
+
 
         /// 
         /// 
