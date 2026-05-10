@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GestionPretBancaire"
         mc:Ignorable="d"
         Title="GestPrêt — Gestion Bancaire"
-        Height="900" Width="1450"
+        Height="950" Width="1500"
         Background="#0F1117"
         WindowStyle="SingleBorderWindow">
 
@@ -249,7 +249,7 @@
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"/>
                         </Border>
-                        <TextBlock Text="GestPrêt"
+                        <TextBlock Text="Gestion Prêt"
                                    FontSize="15" FontWeight="SemiBold"
                                    Foreground="{StaticResource BrTextPrimary}"/>
                         <TextBlock Text="Gestion Bancaire"
@@ -264,14 +264,14 @@
                         Padding="20,14"
                         BorderBrush="{StaticResource BrBorder}"
                         BorderThickness="0,1,0,0">
-                    <StackPanel Orientation="Horizontal">
+                    <!-- <StackPanel Orientation="Horizontal">
                         <TextBlock Text="⚙" FontSize="14"
                                    Foreground="{StaticResource BrTextMuted}"
                                    VerticalAlignment="Center" Margin="0,0,8,0"/>
-                        <TextBlock Text="Paramètres" FontSize="13"
+                        <TextBlock Text="Paramètres" FontSize="13" 
                                    Foreground="{StaticResource BrTextMuted}"
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
+                                   VerticalAlignment="Center"/> 
+                    </StackPanel> -->
                 </Border>
 
                 <!-- Nav label -->

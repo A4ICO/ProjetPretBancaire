@@ -59,7 +59,7 @@ namespace GestionPretBancaire.Repositories
             catch (MySqlException ex)
             {
                 MessageBox.Show($"Erreur de base de données :\n{ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
+                return null ;
             }
         }
 

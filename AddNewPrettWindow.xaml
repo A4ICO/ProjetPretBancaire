@@ -11,7 +11,7 @@
 
     <Window.Resources>
 
-        <!-- ===== BRUSHES ===== -->
+        <!-- BRUSHES -->
         <SolidColorBrush x:Key="BrBgDeep"      Color="#0F1117"/>
         <SolidColorBrush x:Key="BrBgPanel"     Color="#161820"/>
         <SolidColorBrush x:Key="BrBgCard"      Color="#1E2030"/>
@@ -21,7 +21,7 @@
         <SolidColorBrush x:Key="BrTextMuted"   Color="#6B7280"/>
         <SolidColorBrush x:Key="BrTextSub"     Color="#9CA3AF"/>
 
-        <!-- ===== TEXT INPUT STYLE ===== -->
+        <!--   TEXT INPUT STYLE   -->
         <Style x:Key="DarkInput" TargetType="TextBox">
             <Setter Property="Background"               Value="#161820"/>
             <Setter Property="Foreground"               Value="White"/>
@@ -57,7 +57,7 @@
             </Setter>
         </Style>
 
-        <!-- ===== DATE PICKER STYLE ===== -->
+        <!--   DATE PICKER STYLE   -->
         <Style x:Key="DarkDatePicker" TargetType="DatePicker">
             <Setter Property="Background"      Value="#161820"/>
             <Setter Property="Foreground"      Value="White"/>
@@ -181,7 +181,7 @@
             </Setter>
         </Style>
 
-        <!-- ===== COMBO BOX STYLE ===== -->
+        <!--   COMBO BOX STYLE   -->
         <Style x:Key="DarkCombo" TargetType="ComboBox">
             <Setter Property="Background"      Value="#161820"/>
             <Setter Property="Foreground"      Value="White"/>
@@ -266,7 +266,7 @@
             </Setter>
         </Style>
 
-        <!-- ===== PRIMARY BUTTON ===== -->
+        <!--   PRIMARY BUTTON   -->
         <Style x:Key="BtnPrimary" TargetType="Button">
             <Setter Property="Background"      Value="#6366F1"/>
             <Setter Property="Foreground"      Value="White"/>
@@ -297,7 +297,7 @@
             </Setter>
         </Style>
 
-        <!-- ===== CANCEL BUTTON ===== -->
+        <!--   CANCEL BUTTON   -->
         <Style x:Key="BtnCancel" TargetType="Button" BasedOn="{StaticResource BtnPrimary}">
             <Setter Property="Background" Value="#1E2030"/>
             <Setter Property="Foreground" Value="#9CA3AF"/>
@@ -320,7 +320,7 @@
             </Setter>
         </Style>
 
-        <!-- ===== LABEL STYLE ===== -->
+        <!--   LABEL STYLE   -->
         <Style x:Key="FieldLabel" TargetType="TextBlock">
             <Setter Property="FontSize"   Value="11"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
@@ -337,7 +337,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- ===== HEADER ===== -->
+        <!--   HEADER   -->
         <Border Grid.Row="0"
                 Background="#161820"
                 BorderBrush="#1F2235"
@@ -362,7 +362,7 @@
             </StackPanel>
         </Border>
 
-        <!-- ===== FORM BODY ===== -->
+        <!--   FORM BODY   -->
         <ScrollViewer Grid.Row="1"
                       VerticalScrollBarVisibility="Auto"
                       Background="#0F1117">
@@ -612,7 +612,7 @@
             </StackPanel>
         </ScrollViewer>
 
-        <!-- ===== FOOTER BUTTONS ===== -->
+        <!--   FOOTER BUTTONS   -->
         <Border Grid.Row="2"
                 Background="#161820"
                 BorderBrush="#1F2235"

@@ -1,16 +1,7 @@
 ﻿using GestionPretBancaire.Managers;
 using GestionPretBancaire.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using GestionPretBancaire.Models;
 using GestionPretBancaire.Repositories;
 
@@ -35,7 +26,7 @@ namespace GestionPretBancaire
 
 
 
-        // ── Load all clients once ──────────────────────────────────────
+        // Load all clients once
         private async void LoadClients()
         {
             try
@@ -49,7 +40,7 @@ namespace GestionPretBancaire
             }
         }
 
-        // ── Live search as user types ──────────────────────────────────
+        // Live search as user types  
         private void TxtClientSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             string query = TxtClientSearch.Text.Trim().ToLower();
@@ -75,14 +66,14 @@ namespace GestionPretBancaire
                 : Visibility.Collapsed;
         }
 
-        // ── Client selected from list ──────────────────────────────────
+        // Client selected from list  
         private void LstClientResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (LstClientResults.SelectedItem is not Client client) return;
 
             _selectedClient = client;
-            MessageBox.Show($"Client sélectionné : {client.PrenomClient} {client.NomClient}",
-                            "Client Sélectionné", MessageBoxButton.OK, MessageBoxImage.Information);
+            //MessageBox.Show($"Client sélectionné : {client.PrenomClient} {client.NomClient}",
+            //                "Client Sélectionné", MessageBoxButton.OK, MessageBoxImage.Information);
 
             // Build initials
             string initials =
@@ -100,7 +91,7 @@ namespace GestionPretBancaire
             TxtClientSearch.Visibility = Visibility.Collapsed;
         }
 
-        // ── Clear selected client ──────────────────────────────────────
+        // Clear selected client
         private void BtnClearClient_Click(object sender, RoutedEventArgs e)
         {
             _selectedClient = null;
@@ -110,7 +101,7 @@ namespace GestionPretBancaire
             TxtClientSearch.Focus();
         }
 
-        // ── Save ───────────────────────────────────────────────────────
+        // Save
         private async void BtnEnregistrer_Click(object sender, RoutedEventArgs e)
         {
             // Validation
@@ -173,7 +164,7 @@ namespace GestionPretBancaire
 
         }
 
-        // ── Cancel ─────────────────────────────────────────────────────
+        // Cancel
         private void BtnAnnuler_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;

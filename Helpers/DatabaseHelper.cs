@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Windows;
+﻿using System.Windows;
 using MySql.Data.MySqlClient;
 
 namespace GestionPretBancaire.Helpers

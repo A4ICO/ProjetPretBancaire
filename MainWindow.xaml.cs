@@ -21,12 +21,12 @@ namespace GestionPretBancaire
         private readonly ObservableCollection<PretViewModel> listePrets = new();
         public  int _activePretCount  = 0;
         private double totalMontant = 0;
-
+        
 
         public MainWindow()
         {
             InitializeComponent();
-
+            
             _clientManager = new ClientManager(); 
             _pretManager = new PretManager();
 
@@ -126,7 +126,7 @@ namespace GestionPretBancaire
                     DateCreation = p.DateCreation ?? "N/A",
                     DateFin = p.DateFin ?? "N/A",
                     TypePret = p.TypePret ?? "N/A",
-                    StatusPret = p.StatusPret ?? "N/A"
+                    StatusPret = p.StatusPret ?? "Actif"
                 });
                 _activePretCount++;
                 //MessageBox.Show($"{p.StatusPret} {p.TypePret} ");

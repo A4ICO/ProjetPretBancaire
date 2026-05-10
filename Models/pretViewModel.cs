@@ -19,7 +19,7 @@ namespace GestionPretBancaire.Models
         public string? DateFin { get; set; }
 
 
-        public async Task<List<PretViewModel?>> GetAllWithOwner()
+        public async Task<List<PretViewModel>> GetAllWithOwner()
         {
             string query ="SELECT p.ReferencePret, p.NumCompte, c.NomClient, c.PrenomClient, " +
                 "p.Montant, p.TauxTnteret, p.TypePret, p.SatusPret, " +
@@ -36,13 +36,13 @@ namespace GestionPretBancaire.Models
                     //{
                     //    MessageBox.Show($"{item.Montant} {item.StatusPret}");
                     //}
-                    return result.AsList();
+                    return result.ToList();
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"SQL Error: {ex.Message}\n{ex.InnerException?.Message}");
-                return new List<PretViewModel?>();
+                return new List<PretViewModel>();
             }
         }
     }
