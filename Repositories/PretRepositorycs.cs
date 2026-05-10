@@ -9,7 +9,7 @@ namespace GestionPretBancaire.Repositories
 {
     public class PretRepository : IPretRepository
     {
-        // ====================== ADD PRET ======================
+        //  ADD PRET 
 
         public async Task AddAsync(Pret pret)
         {
@@ -72,7 +72,7 @@ namespace GestionPretBancaire.Repositories
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        // ====================== GET ALL ======================
+        //  GET ALL 
         public async Task<List<Pret>> GetAllAsync()
         {
             string query = "SELECT * FROM Pret ORDER BY DateCreation DESC;";
@@ -99,7 +99,7 @@ namespace GestionPretBancaire.Repositories
             }
         }
 
-        // ====================== GET BY CLIENT ======================
+        //  GET BY CLIENT 
         public async Task<List<Pret>> GetByNumCompteAsync(string numCompte)
         {
             string query = "SELECT * FROM Pret WHERE NumCompte = @NumCompte ORDER BY DateCreation DESC;";
@@ -120,7 +120,7 @@ namespace GestionPretBancaire.Repositories
             }
         }
 
-        // ====================== GET BY REFERENCE ======================
+        //  GET BY REFERENCE 
         public async Task<Pret?> GetByReferenceAsync(int reference)
         {
             string query = "SELECT * FROM Pret WHERE Reference = @Reference;";
@@ -140,7 +140,7 @@ namespace GestionPretBancaire.Repositories
             }
         }
 
-        // ====================== UPDATE ======================
+        //  UPDATE 
         public async Task UpdateAsync(Pret pret)
         {
             string query = @"UPDATE Pret 
@@ -176,7 +176,7 @@ namespace GestionPretBancaire.Repositories
             }
         }
 
-        // ====================== DELETE ======================
+        //  DELETE 
         public async Task<bool> DeleteAsync(string reference)
         {
             string query = "DELETE FROM Pret WHERE ReferencePret = @ReferencePret;";
@@ -197,7 +197,7 @@ namespace GestionPretBancaire.Repositories
             }
         }
 
-        // ====================== EXISTS ======================
+        //  EXISTS 
         public async Task<bool> ExistsAsync(int reference)
         {
             string query = "SELECT COUNT(1) FROM Pret WHERE Referencepret = @ReferencePret;";

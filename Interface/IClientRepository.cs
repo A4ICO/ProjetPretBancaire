@@ -5,7 +5,7 @@ namespace GestionPretBancaire.Repositories.Interfaces
     public interface IClientRepository
     {
         Task<List<Client>> GetAllAsync();
-        Task<Client> GetByIdAsync(string numCompte);
+        Task<Client?> GetByIdAsync(string numCompte);
         Task<Client?> GetByCINAsync(string numCIN);
         Task AddAsync(Client client);
         Task UpdateAsync(Client client);

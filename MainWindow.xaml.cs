@@ -1,9 +1,7 @@
 ﻿using GestionPretBancaire.Managers;
 using GestionPretBancaire.Models;
 using GestionPretBancaire.Repositories;
-using GestionPretBancaire.Services;
 using GestionPretBancaire.ViewModels;
-using GestionPretBancaire.Windows;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -215,7 +213,7 @@ namespace GestionPretBancaire
                 });
                 contentPanel.Children.Add(nameRow);
 
-                // ── Helper: key / value row ──────────────────────────────────
+                // ── Helper: key / value row 
                 void AddRow(string key, string value, Brush valueBrush = null)
                 {
                     Grid rowGrid = new Grid { Margin = new Thickness(0, 0, 0, 6) };
@@ -298,7 +296,7 @@ namespace GestionPretBancaire
                 footer.Children.Add(badge);
                 contentPanel.Children.Add(footer);
 
-                // ── Info button (created fresh per card) ─────────────────────
+                // ── Info button (created fresh per card) 
                 var btnFactory = new FrameworkElementFactory(typeof(Border));
                 btnFactory.SetValue(Border.CornerRadiusProperty, new CornerRadius(7));
                 btnFactory.SetValue(Border.BackgroundProperty, new SolidColorBrush(Color.FromArgb(30, 99, 102, 241)));
@@ -343,14 +341,11 @@ namespace GestionPretBancaire
                         MessageBox.Show("Référence invalide.", "Erreur",
                                         MessageBoxButton.OK, MessageBoxImage.Error);
                     }
-
-                   
-
                 };
 
                 contentPanel.Children.Add(infoBtn);
 
-                // ── Assemble and place in grid ───────────────────────────────
+                // ── Assemble and place in grid 
                 cardBorder.Child = contentPanel;
                 Grid.SetRow(cardBorder, row);
                 Grid.SetColumn(cardBorder, col);

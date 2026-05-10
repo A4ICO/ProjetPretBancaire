@@ -42,7 +42,7 @@ namespace GestionPretBancaire.Managers
         /// Get a client by its numero de compte
         /// 
         /// 
-        public async Task<Client> GetByIdAsync(string numCompte)
+        public async Task<Client?> GetByIdAsync(string numCompte)
         {
             return await _repository.GetByIdAsync(numCompte);
         }

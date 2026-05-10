@@ -13,9 +13,9 @@ namespace GestionPretBancaire.Controllers
             _repository = new EcheanceRepository();
         }
 
-        // ─────────────────────────────────────────
+        // 
         // GET ALL
-        // ─────────────────────────────────────────
+        // 
         public async Task<List<Echeance>> GetAllAsync()
         {
             try
@@ -29,9 +29,9 @@ namespace GestionPretBancaire.Controllers
             }
         }
 
-        // ─────────────────────────────────────────
+        // 
         // GET BY CODE
-        // ─────────────────────────────────────────
+        // 
         public async Task<Echeance?> GetAsync(int codeEcheance)
         {
             try
@@ -50,9 +50,9 @@ namespace GestionPretBancaire.Controllers
             }
         }
 
-        // ─────────────────────────────────────────
+        // 
         // GET BY REFERENCE PRET
-        // ─────────────────────────────────────────
+        // 
         public async Task<List<Echeance>> GetByReferencePretAsync(int referencePret)
         {
             try
@@ -71,9 +71,9 @@ namespace GestionPretBancaire.Controllers
             }
         }
 
-        // ─────────────────────────────────────────
+        // 
         // ADD
-        // ─────────────────────────────────────────
+        // 
         public async Task<bool> AddAsync(Echeance echeance)
         {
             try
@@ -98,7 +98,7 @@ namespace GestionPretBancaire.Controllers
                 }
 
                 await _repository.AddAsync(echeance);
-                MessageBox.Show("✅ Echeance added successfully!");
+                MessageBox.Show("Echeance added successfully!");
                 return true;
             }
             catch (Exception ex)
@@ -108,9 +108,9 @@ namespace GestionPretBancaire.Controllers
             }
         }
 
-        // ─────────────────────────────────────────
+        // 
         // UPDATE
-        // ─────────────────────────────────────────
+        // 
         public async Task<bool> UpdateAsync(Echeance echeance)
         {
             try
@@ -147,9 +147,9 @@ namespace GestionPretBancaire.Controllers
             }
         }
 
-        // ─────────────────────────────────────────
+        // 
         // DELETE
-        // ─────────────────────────────────────────
+        // 
         public async Task<bool> DeleteAsync(int codeEcheance)
         {
             try
@@ -176,9 +176,9 @@ namespace GestionPretBancaire.Controllers
                 bool deleted = await _repository.DeleteAsync(codeEcheance);
 
                 if (deleted)
-                    MessageBox.Show("✅ Echeance deleted successfully!");
+                    MessageBox.Show("Echeance deleted successfully!");
                 else
-                    MessageBox.Show("❌ Delete failed.");
+                    MessageBox.Show("Delete failed.");
 
                 return deleted;
             }
